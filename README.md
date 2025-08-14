@@ -1,9 +1,13 @@
 # Mini
+- [요구사항 정의서](https://docs.google.com/spreadsheets/d/1fDgCx5iDPON_75SrwyL6Bpir7MwtLMYpQ946XpjkATA/edit?gid=0#gid=0)
+
+
+
 ## 1) 주요기능
-### A 직원 관리
-- 신규 직원 추가
-- 직원 정보 수정 (소속 팀 수정 / 직위 수정 / 담당 프로젝트 수정)
-- 직원 조회 (유형별)
+### ~~A 직원 관리~~
+- ~~신규 직원 추가~~
+- ~~직원 정보 수정 (소속 팀 수정 / 직위 수정 / 담당 프로젝트 수정)~~
+- ~~직원 조회 (유형별)~~
 ### B 프로젝트 관리
 #### B-1) 프로젝트 생성
 ```java
@@ -24,14 +28,12 @@
 2. 입력값을 검증한다. (양식에 맞는지, 값들은 유효한지)
 	- \[실패] 실패 원인 메세지를 출력하고 재입력 요구
 	- \[성공] 프로젝트 객체를 생성해 Map에 넣는다.
-3. 프로젝트 아이디(PID)와 함께 생성 완료 메세지를 출력한다.
-	- PID : *(name + startdate).hashcode()*
+3. 생성 완료 메세지를 출력한다.
 4. 메인화면으로 돌아가기 위한 0 입력을 받는다.
 ```java
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 <프로젝트 생성 완료>
-PID) 299830902
-
+PID : p12
 메인화면으로 돌아가시려면 0을 입력해주세요
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 입력 : 
@@ -51,8 +53,8 @@ PID / 유형 / 상태 / 리더 / 팀원목록 / 마감일 / 프로젝트 설명
 팀원목록) 이름,이름, ...
 마감일) yyyymmdd
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-입력 : 98387742 / @ / @ / 동길 / @ / @ / 신규 입사자 오리엔테이션 준비
-// < id / type / status / lead / follow / expiredDate / description >
+입력 : p25 / @ / @ / 동길 / @ / @ / 신규 입사자 오리엔테이션 준비
+// < pid / type / status / lead / follow / expiredDate / description >
 ```
 1. 정해진 양식에 맞게 값들을 입력 받는다. (수정하지 않을 항목은 @)
 2. 입력값을 검증한다. (양식에 맞는지, 값들은 유효한지)
@@ -76,8 +78,8 @@ PID / 유형 / 상태 / 리더 / 팀원목록 / 마감일 / 프로젝트 설명
 
 PID / 리더
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-입력 : 98387742 / 동길
-// < id / lead >
+입력 : p25 / 동길
+// < pid / lead >
 ```
 1. 정해진 양식에 맞게 값들을 입력 받는다. (리더 이름은 인증번호 역할?)
 2. 입력값을 검증한다. (양식에 맞는지, 값들은 유효한지)
@@ -125,22 +127,22 @@ PID / 리더
 		- 상세정보 : `간이정보 + 팀원목록 + 설명 + 시작일 + 만료일`
 ```java
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
+[프로젝트 목록]
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 <project1> // 프로젝트 이름
-유형 : 개발 | 상태 : 진행 | 리더 : 길동 | PID : 223948923
+유형 : 개발 | 상태 : 진행 | 리더 : 길동 | PID : p24
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 <project2> // 프로젝트 이름
-유형 : 기획 | 상태 : 진행 | 리더 : 동길 | PID : 532923433
+유형 : 기획 | 상태 : 진행 | 리더 : 동길 | PID : p30
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 <project3> // 프로젝트 이름
-유형 : 디버그 | 상태 : 진행 | 리더 : 동동 | PID : 62423923
+유형 : 디버그 | 상태 : 진행 | 리더 : 동동 | PID : p50
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 <상세정보를 확인하고 싶은 프로젝트의 PID를 입력해주세요>
 <또는 메인화면으로 돌아가시려면 0을 입력해주세요>
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-입력 : 532923433
+입력 : p30
 ```
 3. 상세정보를 확인할 프로젝트의 PID를 입력받거나, 0을 입력받아 메인화면으로 돌아간다.
 	- PID 입력시 해당 프로젝트만의 상세정보 출력
@@ -161,13 +163,51 @@ PID / 리더
 입력 : 
 ```
 - - -
-### 팀 관리
-- 신규 팀 생성
-- 팀 정보 수정 (팀원 추가 / 팀원 제거 / 팀명 수정 / ...)
-- 팀 조회 (유형별)
+### ~~팀 관리~~
+- ~~신규 팀 생성~~
+- ~~팀 정보 수정 (팀원 추가 / 팀원 제거 / 팀명 수정 / ...)~~
+- ~~팀 조회 (유형별)~~
 
 ## 2) 클래스 예시 코드
-##### 직원 employee
+#### 프로젝트 Project
+**<예시 코드>**
+```java
+class Project {
+	// [1] 필드
+	private String pid;
+	private String name;
+	private ProjectType type;
+	private ProjectStatus status = ProjectStatus.NOT_STARTED; 
+	private String lead; 
+	private String[] follows; 
+	private String description;
+	private final Date startDate = new Date();
+	private Date expiredDate;
+	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+	
+	// [2] 생성자 
+	public Project(String pid, String name, int type, String lead, String[] follows, String expiredDate) {
+		this.pid = pid; 
+		this.name = name;
+		this.type = ProjectType.values[type-1];
+		this.lead = lead;
+		this.follows = follows;
+		this.expiredDate = this.sdf.parse(expiredDate);
+	}
+
+	// [3] 접근자 getter
+
+	// [4] 설정자 setter
+
+	// [5] 필요에 따라 메서드 추가하기
+}
+
+// 임시 작명, Enum 관리용 모듈 만들어 통합 관리 예정
+Enum ProjectType { DESIGN, DEVELOP, DEBUG }
+Enum ProjectStatus { ON_HOLD, IN_PROGRESS, COMPLETED, CANCELLED }
+```
+
+#### ~~직원 employee~~
 ```java
 class Employee {
 	// [1] 필드 (전부 private)
@@ -194,37 +234,7 @@ class Employee {
 // 임시 작명, Enum 관리용 모듈 만들어 통합 관리 예정
 Enum Role { JUNIOR, SENIOR, MANAGER, DIRECTOR }
 ```
-##### 프로젝트 Project
-```java
-class Project {
-	// [1] 필드 (전부 private)
-	String name;
-	String leader; // 나중에 id로 변경하거나, Employee 객체 자체 넣기?
-	String description; // 프로젝트 한 줄 소개
-	ProjectType type;
-	ProjectStatus status = ProjectStatus.NOT_STARTED; 
-	String[] teams; // 필요에 따라 HashSet이나 List로 변경?
-	final Date startDate = new Date(); // format 수정해줘야할 듯, yyyy-MM-dd ??
-	Date expiredDate;
 
-	// [2] 생성자 (매개변수는 name, leader, type, teams, expiredDate만 받기)
-	public Project(String name, String leader, ProjectType type, Team[] teams, Date expiredDate) {}
-
-	// [3] 접근자 getter
-	// description 제외 모든 필드 필요할 듯...?
-
-	// [4] 설정자 setter
-	// startDate 제외하고 모든 필드 설정자 필요
-
-	// [5] 필요에 따라 메서드 추가하기
-	// 아마 정렬 기능 위해서 각 필드 별 compare 메서드 많이 생길 듯
-
-}
-
-// 임시 작명, Enum 관리용 모듈 만들어 통합 관리 예정
-Enum ProjectType { CREATE, DEVELOP, DEBUG }
-Enum ProjectStatus { NOT_STARTED, IN_PROGRESS, COMPLETED, ON_HOLD, CANCELLED }
-```
 ## 3) 또 필요한 것
 - `Employee, Project, Team`의 각 인스턴스들 관리용 클래스 필요 
 	- ArrayList? HashSet? Map? 알아보고 결정
