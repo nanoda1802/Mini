@@ -1,27 +1,74 @@
 package model.project;
 
-import java.util.Date;
-
 import configs.project.TaskStatus;
 import configs.project.TaskType;
 import model.team.Member;
 
+import java.time.LocalDateTime;
+
 public class Task {
-	private String tid;
-	private String name;
-	private TaskType type;
-	private TaskStatus status = TaskStatus.NOT_STARTED;
-	private Member pic;
-	private final Date createdAt = new Date();
-	private Date updatedAt = new Date();
-	private Date dueTo;
+    private final LocalDateTime createdAt = LocalDateTime.now();
+    private String tid;
+    private String name;
+    private TaskType type;
+    private TaskStatus status = TaskStatus.NOT_STARTED;
+    private Member pic;
+    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime dueTo;
 
-	public Task(String tid, String name, TaskType type, Member pic, Date dueTo) {
-		this.tid = tid;
-		this.name = name;
-		this.type = type;
-		this.pic = pic;
-		this.dueTo = dueTo;
-	}
+    public Task(String tid, String name, TaskType type, Member pic, LocalDateTime dueTo) {
+        this.tid = tid;
+        this.name = name;
+        this.type = type;
+        this.pic = pic;
+        this.dueTo = dueTo;
+    }
 
+    public String getTid() {
+        return tid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public TaskType getType() {
+        return type;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+
+    public Member getPic() {
+        return pic;
+    }
+
+    public void setPic(Member pic) {
+        this.pic = pic;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public LocalDateTime getDueTo() {
+        return dueTo;
+    }
+
+    public void setDueTo(LocalDateTime dueTo) {
+        this.dueTo = dueTo;
+    }
 }
