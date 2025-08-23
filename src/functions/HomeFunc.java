@@ -1,0 +1,49 @@
+package functions;
+
+import configs.message.SystemMessage;
+import functions.project.ProjectFuncs;
+import functions.team.TeamFuncs;
+import managers.MessageBuilderManager;
+import managers.messageBuild.SystemMessageBuilder;
+import managers.messageBuild.UIMessageBuilder;
+import utils.console.InputReader;
+import utils.console.Viewer;
+
+// [ HomeFuncs 개요 ]
+// - "홈 화면" 단계
+// - UI : 프로젝트 현황 (overview), 최근 활동 (recentLogs)
+// - System : 기능 선택 안내
+
+public class HomeFunc {
+    /* [ 프로그램 실행 내내 호출이 유지될 메서드 ] */
+    public static void start() {
+        // [1] 프로그램 실행 동안 유지될 반복문 시작
+        while (true) {
+            // [Loop-1] 콘솔창 정돈 후, UI와 System 메세지 제작해 출력
+            Viewer.clear();
+
+            UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+            SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+            String uiMsg = ""; // [추가예정] UIMessage 제작 (overview + recentLogs)
+            String sysMsg = sysBuilder.build(SystemMessage.HOME.getMsg());
+
+            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+
+            // [Loop-2] 사용자의 입력값에 따라 알맞은 기능 함수 호출
+            switch (InputReader.read()) {
+                case "1" -> TeamFuncs.inviteMember();
+                case "2" -> TeamFuncs.updateMemberInfo();
+                case "3" -> TeamFuncs.browseMembers();
+                case "4" -> ProjectFuncs.addTask();
+                case "5" -> ProjectFuncs.updateTaskInfo();
+                case "6" -> ProjectFuncs.browseTasks();
+                case "0" -> System.exit(0);
+                default -> {
+                    // [메모] 어차피 반복문의 최하단이어서 continue 없이도 동일하게 작동
+                }
+            }
+
+        }
+    }
+}
