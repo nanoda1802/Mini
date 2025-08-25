@@ -3,11 +3,11 @@ package model.team;
 import configs.team.Authority;
 import model.project.Task;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 public class Member {
-    private final LocalDateTime startDate = LocalDateTime.now();
+    private final LocalDate startDate = LocalDate.now();
     private String mid;
     private String name;
     private Authority auth;
@@ -43,11 +43,11 @@ public class Member {
         return tasks;
     }
 
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
+    public void setTasks(Task task) {
+        this.tasks.add(task);
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 }
