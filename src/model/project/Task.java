@@ -71,4 +71,10 @@ public class Task {
     public void setDueTo(LocalDateTime dueTo) {
         this.dueTo = dueTo;
     }
+
+    // [메모] 기능 test 용도
+    @Override
+    public String toString() {
+        return "tid : "+tid + "\nname : "+name + "\ntype : "+type + "\nstatus : "+status + "\nassignee : "+assignee +"\ncreatedAt : "+createdAt +"\nupdatedAt : "+updatedAt + "\ndueTo : "+dueTo;
+    }
 }

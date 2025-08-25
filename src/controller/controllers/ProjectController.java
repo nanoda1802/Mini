@@ -1,8 +1,14 @@
 package controller.controllers;
 
+import configs.conversion.DateFormat;
+import configs.project.TaskType;
 import controller.*;
+import managers.ConverterManager;
 import model.project.Task;
+import model.team.Member;
+import model.team.Team;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 
@@ -27,15 +33,38 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
 
     @Override
     public void add(String[] infos) {
-        // 업무명 / 유형 / 담당자명 / 마감일
+        // infos = 업무명 / 유형 / 담당자ID / 마감일
+        // 자료형 = String / TaskType / Member / LocalDateTime
 
+        // [1] 항목별로 Task의 각 필드타입에 맞게 convert
+        String tid = createId();
+        String name = infos[0];
+        TaskType type = ConverterManager.stringTaskType.convertTo(infos[1]);
+        Member assignee = infos[2].equals("@")
+                ? null
+                : Team.getInstance().controller.get(infos[2]);
+                // [추가예정] Team.members에서 담당자 인스턴스 찾지 못 했을 경우 구현해야 함
+        LocalDateTime dueTo = infos[3].equals("@")
+                ? null
+                : ConverterManager.stringDate.convertTo(infos[3], DateFormat.yearToDay.getFormat()).atStartOfDay();
+                // [메모] 입력값은 day까지지만, 필요한 타입은 time까지라서
+                //       00:00으로 임의 지정하는 과정이 필요햠. 그걸 위한 atStartOfDay()
 
+        // [2] 신규 Task 인스턴스 생성
+        Task newTask = new Task(tid,name,type,assignee,dueTo);
 
+        // [3] tasks에 새 Task 인스턴스 생성해 추가
+        tasks.put(tid,newTask);
+
+        // [3-A] 만약 담당자 항목이 입력됐다면, 해당 Member 인스턴스의 tasks에도 Add
+        if (!infos[2].equals("@")) {
+            Team.getInstance().controller.get(infos[2]).setTasks(newTask);
+        }
     }
 
     @Override
     public Task get(String tid) {
-        return null;
+        return tasks.get(tid);
     }
 
     @Override
@@ -48,5 +77,9 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
 
     public Collection<Task> getAll() {
         return this.tasks.values();
+    }
+
+    private String createId() {
+        return index < 10 ? "t0" + index++ : "t" + index++;
     }
 }

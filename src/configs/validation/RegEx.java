@@ -14,7 +14,7 @@ public enum RegEx {
 
     ADD_TASK_NAME("^[가-힣a-zA-Z0-9]{1,10}$"),
     ADD_TASK_TYPE("^[1-4]$"),
-    ADD_TASK_ASSIGNEE("^([가-힣]{1,4}|@)$"),
+    ADD_TASK_ASSIGNEE("^m(0[1-9]|[1-9][0-9])|@$"),
     ADD_TASK_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$");
 
     private String regEx;

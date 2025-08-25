@@ -6,6 +6,9 @@ import functions.team.TeamFuncs;
 import managers.MessageBuilderManager;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
+import model.project.Project;
+import model.project.Task;
+import model.team.Team;
 import utils.console.InputReader;
 import utils.console.Viewer;
 
@@ -21,6 +24,9 @@ public class HomeFunc {
         while (true) {
             // [Loop-1] 콘솔창 정돈 후, UI와 System 메세지 제작해 출력
             Viewer.clear();
+
+            Viewer.print(""+ Project.getInstance().controller.getAll().size());
+            Viewer.print(""+ Project.getInstance().controller.getAll());
 
             UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
             SystemMessageBuilder sysBuilder = MessageBuilderManager.system;

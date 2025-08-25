@@ -43,8 +43,8 @@ public class Member {
         return tasks;
     }
 
-    public void setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
+    public void setTasks(Task task) {
+        this.tasks.add(task);
     }
 
     public LocalDateTime getStartDate() {

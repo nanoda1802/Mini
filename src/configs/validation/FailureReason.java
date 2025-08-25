@@ -14,7 +14,7 @@ public enum FailureReason {
 
     ADD_TASK_NAME("이름은 10글자 이하의 한국어,영어,숫자만 입력 가능합니다."),
     ADD_TASK_TYPE("유형은 숫자 1,2,3,4 중 하나만 입력 가능합니다."),
-    ADD_TASK_ASSIGNEE("담당자명은 4글자 이하의 한국어만 입력 가능합니다. 보류하고 싶으시면 @을 입력해주세요."),
+    ADD_TASK_ASSIGNEE("담당자ID는 m02, m33 등의 형태로만 입력 가능합니다. 보류하고 싶으시면 @을 입력해주세요."),
     ADD_TASK_DUE("마감일은 yyyymmdd 형태의 숫자만 입력 가능합니다. 보류하고 싶으시면 @을 입력해주세요.");
 
     private String reason;

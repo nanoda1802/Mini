@@ -7,6 +7,7 @@ import managers.ValidatorManager;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
 import model.project.Project;
+import model.team.Team;
 import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
@@ -44,20 +45,24 @@ public class ProjectFuncs {
 
             Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
 
-            // [Loop-2] 사용자의 입력에 대한 유효성 검사
+            // [Loop-2] 사용자의 입력
             String input = InputReader.read();
-            Pair<Boolean, String> checkResult = ValidatorManager.addTask.check(input);
 
-            // [Loop-2-A] 검사 결과가 true가 아니면 재입력 위해 continue
+            // [Loop-2-A] 특정 번호 입력 시 홈 화면으로 복귀
+            if (input.equals("486")) {
+                return;
+            }
+
+            // [Loop-3] 입력값에 대한 유효성 검사
+            Pair<Boolean, String> checkResult = ValidatorManager.addTask.check(input);
+            // [Loop-3-A] 검사 결과가 true가 아니면 재입력 위해 continue
             if (!checkResult.getKey()) {
                 alert = checkResult; // [메모] checkResult를 통해 alert에 { false, 실패 사유 } 전달
                 continue;
             }
 
-            // [Loop-3] 컨트롤러 호출해 검증된 입력값을 Add (split 해서)
+            // [Loop-4] 컨트롤러 호출해 검증된 입력값을 Add (split 해서)
             Project.getInstance().controller.add(checkResult.getValue().split("/"));
-
-            // [Loop-3-A 추가예정] 만약 담당자 항목이 입력됐다면, 해당 Member 인스턴스의 tasks에도 Add
 
             // [Loop-End] 홈 화면으로 복귀하기 위한 return
             return;
