@@ -24,10 +24,7 @@ public class HomeFunc {
         while (true) {
             // [Loop-1] 콘솔창 정돈 후, UI와 System 메세지 제작해 출력
             Viewer.clear();
-
-            Viewer.print(""+ Project.getInstance().controller.getAll().size());
-            Viewer.print(""+ Project.getInstance().controller.getAll());
-
+            
             UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
             SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
 
