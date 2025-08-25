@@ -12,15 +12,15 @@ public class Task {
     private String name;
     private TaskType type;
     private TaskStatus status = TaskStatus.NOT_STARTED;
-    private Member pic;
+    private Member assignee;
     private LocalDateTime updatedAt = LocalDateTime.now();
     private LocalDateTime dueTo;
 
-    public Task(String tid, String name, TaskType type, Member pic, LocalDateTime dueTo) {
+    public Task(String tid, String name, TaskType type, Member assignee, LocalDateTime dueTo) {
         this.tid = tid;
         this.name = name;
         this.type = type;
-        this.pic = pic;
+        this.assignee = assignee;
         this.dueTo = dueTo;
     }
 
@@ -48,12 +48,12 @@ public class Task {
         this.status = status;
     }
 
-    public Member getPic() {
-        return pic;
+    public Member getAssignee() {
+        return assignee;
     }
 
-    public void setPic(Member pic) {
-        this.pic = pic;
+    public void setAssignee(Member assignee) {
+        this.assignee = assignee;
     }
 
     public LocalDateTime getCreatedAt() {

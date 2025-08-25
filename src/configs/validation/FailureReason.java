@@ -10,7 +10,12 @@ package configs.validation;
 //   지금은 테스트를 위한 아무말 임시 필드가 작성돼있슴다...
 
 public enum FailureReason {
-    ADD_TASK_TEMP("검증 실패!");
+    ADD_TASK_STRUCTURE("\"항목1 / 항목2 / 항목3 / 항목4\" 형태로 입력해주세요."),
+
+    ADD_TASK_NAME("이름은 10글자 이하의 한국어,영어,숫자만 입력 가능합니다."),
+    ADD_TASK_TYPE("유형은 숫자 1,2,3,4 중 하나만 입력 가능합니다."),
+    ADD_TASK_ASSIGNEE("담당자명은 4글자 이하의 한국어만 입력 가능합니다. 보류하고 싶으시면 @을 입력해주세요."),
+    ADD_TASK_DUE("마감일은 yyyymmdd 형태의 숫자만 입력 가능합니다. 보류하고 싶으시면 @을 입력해주세요.");
 
     private String reason;
 

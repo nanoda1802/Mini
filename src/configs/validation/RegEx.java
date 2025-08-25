@@ -10,7 +10,12 @@ package configs.validation;
 //   지금은 테스트를 위한 일괄 검증용 필드가 작성돼있슴다...
 
 public enum RegEx {
-    ADD_TASK("^[가-힣a-zA-Z0-9]{1,10}/[1234]/([가-힣]{1,4}|@)/((19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])|@)$");
+    ADD_TASK_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+$"),
+
+    ADD_TASK_NAME("^[가-힣a-zA-Z0-9]{1,10}$"),
+    ADD_TASK_TYPE("^[1-4]$"),
+    ADD_TASK_ASSIGNEE("^([가-힣]{1,4}|@)$"),
+    ADD_TASK_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$");
 
     private String regEx;
 
