@@ -2,6 +2,7 @@ package managers;
 
 import managers.conversion.Converter;
 import managers.conversion.StringDateConverter;
+import managers.conversion.StringDateTimeConverter;
 import managers.conversion.StringTaskTypeConverter;
 
 // [ ConverterManager 클래스 설명 ]
@@ -15,5 +16,6 @@ import managers.conversion.StringTaskTypeConverter;
 public class ConverterManager extends Manager<Converter> {
     //  [예시] public static ABConverter AB = new ABConverter();
     public static StringDateConverter stringDate = new StringDateConverter();
+    public static StringDateTimeConverter stringDateTime = new StringDateTimeConverter();
     public static StringTaskTypeConverter stringTaskType = new StringTaskTypeConverter();
 }

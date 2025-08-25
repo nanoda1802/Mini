@@ -4,19 +4,20 @@ import configs.project.TaskStatus;
 import configs.project.TaskType;
 import model.team.Member;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Task {
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDate createdAt = LocalDate.now();
     private String tid;
     private String name;
     private TaskType type;
     private TaskStatus status = TaskStatus.NOT_STARTED;
     private Member assignee;
     private LocalDateTime updatedAt = LocalDateTime.now();
-    private LocalDateTime dueTo;
+    private LocalDate dueTo;
 
-    public Task(String tid, String name, TaskType type, Member assignee, LocalDateTime dueTo) {
+    public Task(String tid, String name, TaskType type, Member assignee, LocalDate dueTo) {
         this.tid = tid;
         this.name = name;
         this.type = type;
@@ -56,7 +57,7 @@ public class Task {
         this.assignee = assignee;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
@@ -64,17 +65,17 @@ public class Task {
         return updatedAt;
     }
 
-    public LocalDateTime getDueTo() {
+    public LocalDate getDueTo() {
         return dueTo;
     }
 
-    public void setDueTo(LocalDateTime dueTo) {
+    public void setDueTo(LocalDate dueTo) {
         this.dueTo = dueTo;
     }
 
     // [메모] 기능 test 용도
     @Override
     public String toString() {
-        return "tid : "+tid + "\nname : "+name + "\ntype : "+type + "\nstatus : "+status + "\nassignee : "+assignee +"\ncreatedAt : "+createdAt +"\nupdatedAt : "+updatedAt + "\ndueTo : "+dueTo;
+        return "\ntid : "+tid + "\nname : "+name + "\ntype : "+type + "\nstatus : "+status + "\nassignee : "+assignee +"\ncreatedAt : "+createdAt +"\nupdatedAt : "+updatedAt + "\ndueTo : "+dueTo;
     }
 }

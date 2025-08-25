@@ -1,6 +1,5 @@
 package controller.controllers;
 
-import configs.conversion.DateFormat;
 import configs.project.TaskType;
 import controller.*;
 import managers.ConverterManager;
@@ -8,7 +7,7 @@ import model.project.Task;
 import model.team.Member;
 import model.team.Team;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
     @Override
     public void add(String[] infos) {
         // infos = 업무명 / 유형 / 담당자ID / 마감일
-        // 자료형 = String / TaskType / Member / LocalDateTime
+        // 자료형 = String / TaskType / Member / LocalDate
 
         // [1] 항목별로 Task의 각 필드타입에 맞게 convert
         String tid = createId();
@@ -44,11 +43,9 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
                 ? null
                 : Team.getInstance().controller.get(infos[2]);
                 // [추가예정] Team.members에서 담당자 인스턴스 찾지 못 했을 경우 구현해야 함
-        LocalDateTime dueTo = infos[3].equals("@")
+        LocalDate dueTo = infos[3].equals("@")
                 ? null
-                : ConverterManager.stringDate.convertTo(infos[3], DateFormat.yearToDay.getFormat()).atStartOfDay();
-                // [메모] 입력값은 day까지지만, 필요한 타입은 time까지라서
-                //       00:00으로 임의 지정하는 과정이 필요햠. 그걸 위한 atStartOfDay()
+                : ConverterManager.stringDate.convertTo(infos[3]);
 
         // [2] 신규 Task 인스턴스 생성
         Task newTask = new Task(tid,name,type,assignee,dueTo);
@@ -73,6 +70,7 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
 
     @Override
     public void remove(String tid) {
+        tasks.remove(tid);
     }
 
     public Collection<Task> getAll() {

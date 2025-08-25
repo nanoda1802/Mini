@@ -1,5 +1,6 @@
 package managers.conversion;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,21 +9,12 @@ import java.time.format.DateTimeFormatter;
 // - StringDateConverter는 String과 LocalDate 타입 간의 변환용 클래스입니다.
 
 public class StringDateConverter extends Converter<String, LocalDate> {
-    public LocalDate convertTo(String target,DateTimeFormatter format) {
-        return LocalDate.parse(target,format);
-    }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    public String convertFrom(LocalDate target,DateTimeFormatter format) {
-        return target.format(format);
-    }
-
-    // [문제] format용 매개변수가 필요해버려서 상속의 의미가 없어져버린...
     @Override
-    public LocalDate convertTo(String target) {
-        return null;
-    }
+    public LocalDate convertTo(String target) { return LocalDate.parse(target, formatter); }
     @Override
     public String convertFrom(LocalDate target) {
-        return null;
+        return formatter.format(target);
     }
 }
