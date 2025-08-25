@@ -10,9 +10,41 @@ package functions.team;
 //    이 때, Task 인스턴스의 updatedAt에 대한 갱신도 잊지 않기! (자동으로 갱신되는 Util 메서드를 만드...?)
 // - 486을 입력해 홈 화면으로 복귀하는 기능은 구현되지 않았습니다!!
 
+import configs.message.SystemMessage;
+import configs.message.UIMessage;
+import managers.MessageBuilderManager;
+import managers.messageBuild.SystemMessageBuilder;
+import managers.messageBuild.UIMessageBuilder;
+import utils.Pair;
+import utils.console.InputReader;
+import utils.console.Viewer;
+
+import java.util.List;
+
 public class TeamFuncs {
     /* [ "팀원초대" 선택 시 실행될 메서드 ] */
     public static void inviteMember() {
+        Pair<Boolean, String> alert = new Pair<>(true, "");  // [메모] System 메세지 갱신에 활용할 지역변수
+        // [1] 업무등록 화면 유지할 반복문 시작
+        while (true) {
+            // [Loop-1] UI와 System 문자열 제작해 출력
+            Viewer.clear();
+
+            UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+            SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+            String uiMsg = uiBuilder.build(UIMessage.INVITE_MEMBER.getMsg());
+            String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
+                    ? sysBuilder.build(SystemMessage.INVITE_MEMBER.getMsg())
+                    : sysBuilder.build(new Pair<String, List<Object>>(SystemMessage.INVITE_MEMBER_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+
+            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+
+            // [Loop-2] 486이 입력되면 홈 화면으로 복귀
+            String input = InputReader.read();
+            if(input.equals("486")) return;
+            // [Loop-3] 사용자의 입력에 대한 유효성 검사
+        }
     }
 
     /* [ "팀원정보수정" 선택 시 실행될 메서드 ] */
