@@ -13,9 +13,9 @@ import java.util.Map;
 // [ 메모 ]
 // - add() 메서드 실행 마다 TID를 생성하고, index 필드의 값을 1씩 implement 해야 합니다.
 // - Task 인스턴스 생성 시 입력값이 보류된 필드에 대한 처리 방법의 고민이 필요합니다.
-//      ex) "비품구매/4/@/20270722" -> 보류된 pic 필드에 null을 할당...? Optional.empty()...?
+//      ex) "비품구매/4/@/20270722" -> 보류된 assignee 필드에 null을 할당...? Optional.empty()...?
 // - "업무조회" 기능 관련해, 보류된 필드에 대한 출력값 설정이 필요합니다.
-//      ex) name=비품구매/type=기타/status=진행/pic=null" -> 콘솔화면에서 pic는 "미정"으로...?
+//      ex) name=비품구매/type=기타/status=진행/assignee=null" -> 콘솔화면에서 assignee는 "미정"으로...?
 
 public class ProjectController extends Controller implements Adder, Getter<Task>, Updater, Remover {
     private Map<String, Task> tasks;
@@ -27,6 +27,10 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
 
     @Override
     public void add(String[] infos) {
+        // 업무명 / 유형 / 담당자명 / 마감일
+
+
+
     }
 
     @Override
