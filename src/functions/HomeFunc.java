@@ -39,19 +39,23 @@ public class HomeFunc {
             // [Test] 기능 테스트용 콘솔
             // FuncTest.showProject(); (비활성화)
 
+            // [임시 1] overview 메세지 제작 중
             OverviewMessageBuilder overviewBuilder = MessageBuilderManager.overview;
 
             List<String> overviewInfos =Project.getInstance().controller.countTasksByStatus();
 
             Pair<Integer,Integer> assignment = Team.getInstance().controller.countAssignment();
-            overviewInfos.add(MakeGraph.draw(assignment.getKey(), assignment.getValue()));
+            overviewInfos.add(MakeGraph.draw(4,10)); // assingment 넣으니까 immutable 오류 뜸
+            // 4랑 10 넣어도 뜨네;
 
             String overviewMsg = overviewBuilder.build(new Pair<>(Ingredient.OVERVIEW.getFormat(),overviewInfos));
 
-            
+            Viewer.print(overviewMsg);
 
+            // [임시 2] recentLogs 메세지 제작 해야함
             RecentLogsMessageBuilder recentLogsBuilder = MessageBuilderManager.recentLogs;
 
+            // [임시 3] 그리고 ui 메세지 빌더에 넣어야 함
             UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
             SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
 
