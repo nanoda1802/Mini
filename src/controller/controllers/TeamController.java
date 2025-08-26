@@ -1,8 +1,12 @@
 package controller.controllers;
 
+import configs.team.Authority;
 import controller.*;
+import managers.ConverterManager;
+import model.project.Task;
 import model.team.Member;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -25,6 +29,19 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
 
     @Override
     public void add(String[] infos) {
+        // infos = 팀원명 / 권한
+        // 자료형 = String / Authority
+
+        // [1] 항목별로 Team의 각 필드타입에 맞게 convert
+        String mid =  createMID();
+        String name = infos[0];
+        Authority auth = ConverterManager.stringAuthority.convertTo(infos[1]);
+        
+        // [2] 멤버 신규 인스턴스 생성
+        Member member = new Member(mid, name, auth);
+        
+        // [3] members에 멤버 저장
+        members.put(mid, member);
     }
 
     @Override
@@ -34,10 +51,24 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
 
     @Override
     public void update(String[] changes) {
+        // infos = 팀원ID / 팀원명 / 권한 / 담당업무(tid)
+        // 자료형 = String / String / Authority / String
+        // [1] 항목별로 Team의 각 필드타입에 맞게 convert
+        String name = changes[1];
+        Authority auth = ConverterManager.stringAuthority.convertTo(changes[2]);
+        String[] tids = changes[3].split(",");
+        ArrayList<Task> tasks = new ArrayList<>();
+        for (String tid : tids) {
+        }
+        // [2] mid로 해당 팀원 가져오기
+        // [3] 멤버 업데이트
     }
 
     @Override
     public void remove(String eid) {
+    }
+    private String createMID(){
+        return  index < 10 ? "m0" + index++ : "m" + index++;
     }
 
     public Collection<Member> getAll() {
