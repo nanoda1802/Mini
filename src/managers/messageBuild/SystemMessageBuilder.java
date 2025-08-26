@@ -1,7 +1,5 @@
 package managers.messageBuild;
 
-import utils.Pair;
-
 import java.util.List;
 
 // [ SystemMessageBuilder 클래스 설명 ]
@@ -18,8 +16,8 @@ import java.util.List;
 
 public class SystemMessageBuilder extends MessageBuilder {
     @Override
-    public String build(Pair<String, List<String>> ingredients) {
-        return String.format(ingredients.getKey(), ingredients.getValue().toArray());
+    public String build(String format, List<String> ingredients) {
+        return String.format(format, ingredients.toArray());
     }
 
     @Override
