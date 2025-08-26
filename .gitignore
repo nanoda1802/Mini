@@ -6,3 +6,4 @@
 /production/
 /.idea/
 *.iml
+*.class
