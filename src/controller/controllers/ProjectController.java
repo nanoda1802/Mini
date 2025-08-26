@@ -60,11 +60,6 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
     }
 
     @Override
-    public Task get(String tid) {
-        return tasks.get(tid);
-    }
-
-    @Override
     public void update(String[] changes) {
         // changes = TID / 업무명 / 상태 / 담당자ID / 마감일
         // 자료형 = String / String / TaskStatus / Member / LocalDate
@@ -98,6 +93,13 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
         }
         // [3] 해당 Task의 updatedAt 필드 최신화
         targetTask.updateTime();
+    }
+
+    public void browse(String[] conditions) {}
+
+    @Override
+    public Task get(String tid) {
+        return tasks.get(tid);
     }
 
     @Override

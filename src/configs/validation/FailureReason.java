@@ -20,7 +20,12 @@ public enum FailureReason {
     UPDATE_TASK_INFO_NAME("업무명은 15자 이하의 한국어,영어,숫자만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요."),
     UPDATE_TASK_INFO_STATUS("상태는 숫자 1,2,3 중 하나만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요."),
     UPDATE_TASK_INFO_ASSIGNEE("담당자ID는 m02, m33 등의 형태로만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요."),
-    UPDATE_TASK_INFO_DUE("마감일은 yyyymmdd 형태의 숫자만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요.");
+    UPDATE_TASK_INFO_DUE("마감일은 yyyymmdd 형태의 숫자만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요."),
+    BROWSE_TASKS_STRUCTURE("\"기준1,조건1 / 기준2,조건2 / ...\" 형태로 입력해주세요."),
+    BROWSE_TASKS_CRITERIA("기준은 숫자 1,2,3 중 하나만 입력 가능합니다."),
+    BROWSE_TASKS_CONDITION_TYPE("유형 조건은 숫자 1,2,3,4 중 하나만 입력 가능합니다."),
+    BROWSE_TASKS_CONDITION_STATUS("상태 조건은 숫자 1,2,3 중 하나만 입력 가능합니다."),
+    BROWSE_TASKS_CONDITION_MID("팀원ID는 m02, m33 등의 형태로만 입력 가능합니다.");
 
     private String reason;
 

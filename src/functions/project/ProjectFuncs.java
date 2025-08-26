@@ -114,6 +114,43 @@ public class ProjectFuncs {
 
     /* [ "업무조회" 선택 시 실행될 메서드 ] */
     public static void browseTasks() {
+        Pair<Boolean, String> alert = new Pair<>(true, "");  // [메모] System 메세지 갱신에 활용할 지역변수
+        while (true) {
+            // [Loop-1] UI와 System 문자열 제작해 출력
+            Viewer.clear();
+
+            UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+            SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+            String uiMsg = uiBuilder.build(UIMessage.BROWSE_TASKS.getMsg());
+            String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
+                    ? sysBuilder.build(SystemMessage.BROWSE_TASKS.getMsg())
+                    : sysBuilder.build(new Pair<String, List<Object>>(SystemMessage.BROWSE_TASKS_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+
+            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+
+            // [Loop-2] 사용자의 입력
+            String input = InputReader.read();
+
+            // [Loop-2-A] 특정 번호 입력 시 홈 화면으로 복귀
+            if (input.equals("486")) {
+                return;
+            }
+
+            // [Loop-3] 입력값에 대한 유효성 검사
+            Pair<Boolean, String> checkResult = ValidatorManager.browseTasks.check(input);
+            // [Loop-3-A] 검사 결과가 true가 아니면 재입력 위해 continue
+            if (!checkResult.getKey()) {
+                alert = checkResult; // [메모] checkResult를 통해 alert에 { false, 실패 사유 } 전달
+                continue;
+            }
+
+            // [Loop-4] 컨트롤러 호출해 검증된 입력값을 update (split 해서)
+            Project.getInstance().controller.browse(checkResult.getValue().split("/"));
+
+            // [Loop-End] 홈 화면으로 복귀하기 위한 return
+            return;
+        }
     }
 }
 

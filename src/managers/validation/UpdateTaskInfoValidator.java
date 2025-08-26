@@ -7,7 +7,7 @@ import utils.Pair;
 import java.util.regex.Pattern;
 
 // [ UpdateTaskInfoValidator 클래스 설명 ]
-// - UpdateTaskInfoValidator "업무정보조회"의 입력값에 대한 유효성 검사용 클래스입니다.
+// - UpdateTaskInfoValidator는 "업무정보수정"의 입력값에 대한 유효성 검사용 클래스입니다.
 
 public class UpdateTaskInfoValidator extends Validator {
     @Override

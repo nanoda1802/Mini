@@ -1,6 +1,7 @@
 package managers;
 
 import managers.validation.AddTaskValidator;
+import managers.validation.BrowseTasksValidator;
 import managers.validation.UpdateTaskInfoValidator;
 import managers.validation.Validator;
 
@@ -15,7 +16,7 @@ import managers.validation.Validator;
 public class ValidatorManager extends Manager<Validator> {
     public static AddTaskValidator addTask = new AddTaskValidator();
     public static UpdateTaskInfoValidator updateTaskInfo = new UpdateTaskInfoValidator();
-//  [추가 예정] public static BrowseTasksValidator browseTasks = new BrowseTasksValidator();
+    public static BrowseTasksValidator browseTasks = new BrowseTasksValidator();
 //  [추가 예정] public static InviteMemberValidator inviteMember = new InviteMemberValidator();
 //  [추가 예정] public static UpdateMemberInfoValidator updateMemberInfo = new UpdateMemberInfoValidator();
 //  [추가 예정] public static BrowseMembersValidator browseMembers = new BrowseMembersValidator();
