@@ -13,8 +13,10 @@ package functions.team;
 import configs.message.SystemMessage;
 import configs.message.UIMessage;
 import managers.MessageBuilderManager;
+import managers.ValidatorManager;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
+import managers.validation.InviteMemberValidator;
 import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
@@ -40,10 +42,12 @@ public class TeamFuncs {
 
             Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
 
-            // [Loop-2] 486이 입력되면 홈 화면으로 복귀
+            // [Loop-2] 특정 문자가 입력되면 홈 화면으로 복귀
             String input = InputReader.read();
             if(input.equals("486")) return;
+
             // [Loop-3] 사용자의 입력에 대한 유효성 검사
+            alert = ValidatorManager.inviteMember.check(input);
         }
     }
 
