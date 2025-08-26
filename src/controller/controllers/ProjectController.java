@@ -1,5 +1,6 @@
 package controller.controllers;
 
+import configs.project.TaskStatus;
 import configs.project.TaskType;
 import controller.*;
 import managers.ConverterManager;
@@ -9,8 +10,11 @@ import model.team.Member;
 import model.team.Team;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 // [ ProjectController 클래스 설명 ]
@@ -45,16 +49,16 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
         Member assignee = infos[2].equals("@")
                 ? null
                 : Team.getInstance().controller.get(infos[2]);
-                // [추가예정] Team.members에서 담당자 인스턴스 찾지 못 했을 경우 구현해야 함
+        // [추가예정] Team.members에서 담당자 인스턴스 찾지 못 했을 경우 구현해야 함
         LocalDate dueTo = infos[3].equals("@")
                 ? null
                 : ConverterManager.stringDate.convertTo(infos[3]);
 
         // [2] 신규 Task 인스턴스 생성
-        Task newTask = new Task(tid,name,type,assignee,dueTo);
+        Task newTask = new Task(tid, name, type, assignee, dueTo);
 
         // [3] tasks에 새 Task 인스턴스 생성해 추가
-        tasks.put(tid,newTask);
+        tasks.put(tid, newTask);
 
         // [3-A] 만약 담당자 항목이 입력됐다면, 해당 Member 인스턴스의 tasks에도 Add
         if (assignee != null) {
@@ -147,6 +151,18 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
 
         // [3] 필터링 마친 Task들을 스트림 형태로 반환
         return filtering;
+    }
+
+    /*  현존 Task들의 유형별 개수 세기 (홈화면 overview에 활용) */
+    public List<String> countTasksByStatus() {
+        // [1] 유형별로 셀 수 있는 변수 준비
+        int[] count = {0, 0, 0, tasks.size()};
+        // [2] task들 순회하면서 유형별로 count (출력 순서는 완료-진행-대기라서 인덱스를 뒤집어줘야 함)
+        // [수정예정] 상수 2에서 빼는 방식 말고, reverse든 뭐든 방법을 찾아서 뒤집기
+        this.getAll().forEach(task -> count[2-task.getStatus().ordinal()] += 1);
+        // [3] 각 갯수 모은 int 배열을 String List로 변환해 반환
+        // [메모] 바로 toList() 하면 그 List는 Immutable이라서, Collectors.toList()를 해야 add할 수 있음
+        return Arrays.stream(count).mapToObj(String::valueOf).collect(Collectors.toList());
     }
 
     public Collection<Task> getAll() {

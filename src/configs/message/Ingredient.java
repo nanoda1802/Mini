@@ -10,9 +10,8 @@ package configs.message;
 
 public enum Ingredient {
     OVERVIEW("""
-            [업무상태] 완료 %d | 진행 %d | 대기 %d | 전체 %d
-            [분업평가] %s | 업무보유율=■ | 미보유율=□
-                     가장 업무가 많은 팀원은 %s님이며, 현재 분업 현황 점수는 %.1f 점입니다.
+            [업무상태] 완료 %s | 진행 %s | 대기 %s | 전체 %s
+            [분업현황] %s ( ■ = 담당업무 보유 팀원 | □ = 담당업무 미보유 팀원 )
             """),
     TASK_LIST("""
             = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -21,12 +20,12 @@ public enum Ingredient {
               기간 : %s ~ %s
             """),
     TASK_LIST_FAILED("\" 조건에 부합하는 Task가 존재하지 않습니다! \""),
-    LOG_INVITE_MEMBER("  |  새로운 팀원 [ %s ] 님을 초대했습니다."),
-    LOG_UPDATE_MEMBER_INFO("  |  [ %s ] 님의 정보를 수정했습니다."),
-    LOG_DISMISS_MEMBER("  |  [ %s ] 님을 팀에서 해임했습니다."),
-    LOG_ADD_TASK("  |  신규 업무 [ %s ]을(를) 등록했습니다."),
-    LOG_UPDATE_TASK_INFO("  |  [ %s ] 업무 정보를 수정했습니다."),
-    LOG_REMOVE_TASK("  |  [ %s ] 업무 정보를 제거했습니다.");
+    LOG_INVITE_MEMBER("%s  |  새로운 팀원 [ %s ] 님을 초대했습니다."),
+    LOG_UPDATE_MEMBER_INFO("%s  |  [ %s ] 님의 정보를 수정했습니다."),
+    LOG_DISMISS_MEMBER("%s  |  [ %s ] 님을 팀에서 해임했습니다."),
+    LOG_ADD_TASK("%s  |  신규 업무 [ %s ]을(를) 등록했습니다."),
+    LOG_UPDATE_TASK_INFO("%s  |  [ %s ] 업무 정보를 수정했습니다."),
+    LOG_REMOVE_TASK("%s  |  [ %s ] 업무 정보를 제거했습니다.");
 
     private String format;
 

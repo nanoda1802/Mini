@@ -12,18 +12,15 @@ package functions.team;
 
 import configs.message.SystemMessage;
 import configs.message.UIMessage;
-import controller.controllers.TeamController;
 import managers.MessageBuilderManager;
 import managers.ValidatorManager;
+import managers.messageBuild.MessageBuilder;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
-import managers.validation.InviteMemberValidator;
 import model.team.Team;
 import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
-
-import java.util.List;
 
 public class TeamFuncs {
     /* [ "팀원초대" 선택 시 실행될 메서드 ] */
@@ -40,9 +37,9 @@ public class TeamFuncs {
             String uiMsg = uiBuilder.build(UIMessage.INVITE_MEMBER.getMsg());
             String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
                     ? sysBuilder.build(SystemMessage.INVITE_MEMBER.getMsg())
-                    : sysBuilder.build(new Pair<>(SystemMessage.INVITE_MEMBER_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+                    : sysBuilder.build(SystemMessage.INVITE_MEMBER_FAILED.getMsg(), MessageBuilder.pack(alert.getValue()));
 
-            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+            Viewer.print(MessageBuilder.integrate(uiMsg, sysMsg));
 
             // [Loop-2] 특정 문자가 입력되면 홈 화면으로 복귀
             String input = InputReader.read();
@@ -73,9 +70,9 @@ public class TeamFuncs {
             String uiMsg = uiBuilder.build(UIMessage.UPDATE_MEMBER_INFO.getMsg());
             String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
                     ? sysBuilder.build(SystemMessage.UPDATE_MEMBER_INFO.getMsg())
-                    : sysBuilder.build(new Pair<>(SystemMessage.UPDATE_MEMBER_INFO_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+                    : sysBuilder.build(SystemMessage.UPDATE_MEMBER_INFO_FAILED.getMsg(), MessageBuilder.pack(alert.getValue()));
 
-            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+            Viewer.print(MessageBuilder.integrate(uiMsg, sysMsg));
 
             // [Loop-2] 특정 문자가 입력되면 홈 화면으로 복귀
             String input = InputReader.read();

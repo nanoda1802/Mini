@@ -1,7 +1,6 @@
 package managers.messageBuild.ingredient;
 
 import managers.messageBuild.MessageBuilder;
-import utils.Pair;
 
 import java.util.List;
 
@@ -14,8 +13,8 @@ import java.util.List;
 
 public class OverviewMessageBuilder extends MessageBuilder {
     @Override
-    public String build(Pair<String, List<String>> ingredients) {
-        return "";
+    public String build(String format, List<String> ingredients) {
+        return String.format(format,ingredients.toArray());
     }
 
     @Override

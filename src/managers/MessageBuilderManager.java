@@ -4,7 +4,6 @@ import managers.messageBuild.MessageBuilder;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
 import managers.messageBuild.ingredient.OverviewMessageBuilder;
-import managers.messageBuild.ingredient.RecentLogsMessageBuilder;
 import managers.messageBuild.ingredient.TaskListMessageBuilder;
 
 // [ MessageBuilderManager 클래스 설명 ]
@@ -21,7 +20,6 @@ public class MessageBuilderManager extends Manager<MessageBuilder> {
     public static UIMessageBuilder ui = new UIMessageBuilder();
     public static SystemMessageBuilder system = new SystemMessageBuilder();
     // [ 재료 MessageBuilder ]
-    public static RecentLogsMessageBuilder recentLogs = new RecentLogsMessageBuilder();
     public static OverviewMessageBuilder overview = new OverviewMessageBuilder();
     public static TaskListMessageBuilder taskList = new TaskListMessageBuilder();
 }
