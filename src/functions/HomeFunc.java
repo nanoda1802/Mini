@@ -1,17 +1,24 @@
 package functions;
 
+import configs.message.Ingredient;
 import configs.message.SystemMessage;
 import functions.project.ProjectFuncs;
 import functions.team.TeamFuncs;
 import managers.MessageBuilderManager;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
+import managers.messageBuild.ingredient.OverviewMessageBuilder;
+import managers.messageBuild.ingredient.RecentLogsMessageBuilder;
 import model.project.Project;
 import model.project.Task;
 import model.team.Team;
 import utils.FuncTest;
+import utils.MakeGraph;
+import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
+
+import java.util.List;
 
 // [ HomeFuncs 개요 ]
 // - "홈 화면" 단계
@@ -30,7 +37,20 @@ public class HomeFunc {
             Viewer.clear();
 
             // [Test] 기능 테스트용 콘솔
-//            FuncTest.showProject(); (비활성화)
+            // FuncTest.showProject(); (비활성화)
+
+            OverviewMessageBuilder overviewBuilder = MessageBuilderManager.overview;
+
+            List<String> overviewInfos =Project.getInstance().controller.countTasksByStatus();
+
+            Pair<Integer,Integer> assignment = Team.getInstance().controller.countAssignment();
+            overviewInfos.add(MakeGraph.draw(assignment.getKey(), assignment.getValue()));
+
+            String overviewMsg = overviewBuilder.build(new Pair<>(Ingredient.OVERVIEW.getFormat(),overviewInfos));
+
+            
+
+            RecentLogsMessageBuilder recentLogsBuilder = MessageBuilderManager.recentLogs;
 
             UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
             SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
