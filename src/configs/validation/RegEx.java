@@ -21,7 +21,7 @@ public enum RegEx {
     UPDATE_TASK_INFO_STATUS("^[1-3]|@$"),
     UPDATE_TASK_INFO_ASSIGNEE("^m(0[1-9]|[1-9][0-9])|@$"),
     UPDATE_TASK_INFO_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$"),
-    BROWSE_TASKS_STRUCTURE("^\\s*\\d+,[^,/]+(\\s*/\\s*\\d+,[^,/]+){0,3}\\s*$"),
+    BROWSE_TASKS_STRUCTURE("^\\s*\\d+,[^,/]+(\\s*/\\s*\\d+,[^,/]+){0,2}\\s*$"),
     BROWSE_TASKS_CRITERIA("^[1-3]$"),
     BROWSE_TASKS_CONDITION_TYPE("^[1-4]$"),
     BROWSE_TASKS_CONDITION_STATUS("^[1-3]$"),

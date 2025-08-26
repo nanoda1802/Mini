@@ -23,6 +23,7 @@ public enum FailureReason {
     UPDATE_TASK_INFO_DUE("마감일은 yyyymmdd 형태의 숫자만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요."),
     BROWSE_TASKS_STRUCTURE("\"기준1,조건1 / 기준2,조건2 / ...\" 형태로 입력해주세요."),
     BROWSE_TASKS_CRITERIA("기준은 숫자 1,2,3 중 하나만 입력 가능합니다."),
+    BROWSE_TASKS_DUPLICATED("하나의 기준을 여러 번 설정할 수 없습니다."),
     BROWSE_TASKS_CONDITION_TYPE("유형 조건은 숫자 1,2,3,4 중 하나만 입력 가능합니다."),
     BROWSE_TASKS_CONDITION_STATUS("상태 조건은 숫자 1,2,3 중 하나만 입력 가능합니다."),
     BROWSE_TASKS_CONDITION_MID("팀원ID는 m02, m33 등의 형태로만 입력 가능합니다.");

@@ -19,6 +19,7 @@ public class UpdateTaskInfoValidator extends Validator {
         if (!isRightStructure) {
             return new Pair<>(false, FailureReason.UPDATE_TASK_INFO_STRUCTURE.getReason());
         }
+
         // [2] 항목별 유효성 검사 진행
         String[] fields = target.split("/");
 
@@ -44,6 +45,6 @@ public class UpdateTaskInfoValidator extends Validator {
         }
 
         // [3] 검증된 입력값을 Pair 클래스로 감싸 반환한다.
-        return new Pair<>(true,target);
+        return new Pair<>(true, target);
     }
 }
