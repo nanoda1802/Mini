@@ -9,6 +9,7 @@ import managers.messageBuild.UIMessageBuilder;
 import model.project.Project;
 import model.project.Task;
 import model.team.Team;
+import utils.FuncTest;
 import utils.console.InputReader;
 import utils.console.Viewer;
 
@@ -20,11 +21,17 @@ import utils.console.Viewer;
 public class HomeFunc {
     /* [ 프로그램 실행 내내 호출이 유지될 메서드 ] */
     public static void start() {
+        // [Test] 기능 테스트용 더미 데이터 추가
+        FuncTest.addDummyTasks();
+
         // [1] 프로그램 실행 동안 유지될 반복문 시작
         while (true) {
             // [Loop-1] 콘솔창 정돈 후, UI와 System 메세지 제작해 출력
             Viewer.clear();
-            
+
+            // [Test] 기능 테스트용 콘솔
+//            FuncTest.showProject(); (비활성화)
+
             UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
             SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
 

@@ -73,9 +73,13 @@ public class Task {
         this.dueTo = dueTo;
     }
 
+    public void updateTime() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
     // [메모] 기능 test 용도
     @Override
     public String toString() {
-        return "\ntid : "+tid + "\nname : "+name + "\ntype : "+type + "\nstatus : "+status + "\nassignee : "+assignee +"\ncreatedAt : "+createdAt +"\nupdatedAt : "+updatedAt + "\ndueTo : "+dueTo;
+        return "\n< "+tid +" >"+ "\n업무명 : "+name + "\n유형 : "+type + "\n상태 : "+status + "\n담당자 : "+assignee +"\n생성일 : "+createdAt +"\n수정일 : "+updatedAt + "\n마감일 : "+dueTo;
     }
 }

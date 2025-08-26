@@ -74,12 +74,42 @@ public class ProjectFuncs {
     public static void updateTaskInfo() {
         Pair<Boolean, String> alert = new Pair<>(true, "");  // [메모] System 메세지 갱신에 활용할 지역변수
         // [1] 업무등록 화면 유지할 반복문 시작
-        // [Loop-1] UI와 System 문자열 제작해 출력
-        // [Loop-2] 사용자의 입력에 대한 유효성 검사
-        // [Loop-2-A] 검사 결과가 true가 아니면 재입력 위해 continue
-        // [Loop-3] 컨트롤러 호출해 검증된 입력값을 update (split 해서)
-        // [Loop-3-A 추가예정] 만약 담당자 항목이 수정됐다면, 해당 Member 인스턴스의 tasks에도 Add
-        // [Loop-End] 홈 화면으로 복귀하기 위한 return
+        while (true) {
+            // [Loop-1] UI와 System 문자열 제작해 출력
+            Viewer.clear();
+
+            UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+            SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+            String uiMsg = uiBuilder.build(UIMessage.UPDATE_TASK_INFO.getMsg());
+            String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
+                    ? sysBuilder.build(SystemMessage.UPDATE_TASK_INFO.getMsg())
+                    : sysBuilder.build(new Pair<String, List<Object>>(SystemMessage.UPDATE_TASK_INFO_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+
+            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+
+            // [Loop-2] 사용자의 입력
+            String input = InputReader.read();
+
+            // [Loop-2-A] 특정 번호 입력 시 홈 화면으로 복귀
+            if (input.equals("486")) {
+                return;
+            }
+
+            // [Loop-3] 입력값에 대한 유효성 검사
+            Pair<Boolean, String> checkResult = ValidatorManager.updateTaskInfo.check(input);
+            // [Loop-3-A] 검사 결과가 true가 아니면 재입력 위해 continue
+            if (!checkResult.getKey()) {
+                alert = checkResult; // [메모] checkResult를 통해 alert에 { false, 실패 사유 } 전달
+                continue;
+            }
+
+            // [Loop-4] 컨트롤러 호출해 검증된 입력값을 update (split 해서)
+            Project.getInstance().controller.update(checkResult.getValue().split("/"));
+
+            // [Loop-End] 홈 화면으로 복귀하기 위한 return
+            return;
+        }
     }
 
     /* [ "업무조회" 선택 시 실행될 메서드 ] */

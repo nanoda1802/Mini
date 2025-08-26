@@ -11,11 +11,16 @@ package configs.validation;
 
 public enum FailureReason {
     ADD_TASK_STRUCTURE("\"항목1 / 항목2 / 항목3 / 항목4\" 형태로 입력해주세요."),
-
-    ADD_TASK_NAME("이름은 10글자 이하의 한국어,영어,숫자만 입력 가능합니다."),
+    ADD_TASK_NAME("업무명은 15자 이하의 한국어,영어,숫자만 입력 가능합니다."),
     ADD_TASK_TYPE("유형은 숫자 1,2,3,4 중 하나만 입력 가능합니다."),
     ADD_TASK_ASSIGNEE("담당자ID는 m02, m33 등의 형태로만 입력 가능합니다. 보류하고 싶으시면 @을 입력해주세요."),
-    ADD_TASK_DUE("마감일은 yyyymmdd 형태의 숫자만 입력 가능합니다. 보류하고 싶으시면 @을 입력해주세요.");
+    ADD_TASK_DUE("마감일은 yyyymmdd 형태의 숫자만 입력 가능합니다. 보류하고 싶으시면 @을 입력해주세요."),
+    UPDATE_TASK_INFO_STRUCTURE("\"항목1 / 항목2 / 항목3 / 항목4 / 항목5\" 형태로 입력해주세요."),
+    UPDATE_TASK_INFO_TID("업무ID는 t02, t33 등의 형태로만 입력 가능합니다."),
+    UPDATE_TASK_INFO_NAME("업무명은 15자 이하의 한국어,영어,숫자만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요."),
+    UPDATE_TASK_INFO_STATUS("상태는 숫자 1,2,3 중 하나만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요."),
+    UPDATE_TASK_INFO_ASSIGNEE("담당자ID는 m02, m33 등의 형태로만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요."),
+    UPDATE_TASK_INFO_DUE("마감일은 yyyymmdd 형태의 숫자만 입력 가능합니다. 수정하지 않을 항목이면 @을 입력해주세요.");
 
     private String reason;
 

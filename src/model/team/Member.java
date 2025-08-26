@@ -43,8 +43,12 @@ public class Member {
         return tasks;
     }
 
-    public void setTasks(Task task) {
+    public void addTask(Task task) {
         this.tasks.add(task);
+    }
+
+    public void removeTask(Task task) {
+        this.tasks.remove(task);
     }
 
     public LocalDate getStartDate() {
