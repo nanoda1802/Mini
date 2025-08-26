@@ -55,7 +55,7 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
 
         // [3-A] 만약 담당자 항목이 입력됐다면, 해당 Member 인스턴스의 tasks에도 Add
         if (!infos[2].equals("@")) {
-            Team.getInstance().controller.get(infos[2]).setTasks(newTask);
+            Team.getInstance().controller.get(infos[2]).addTask(newTask);
         }
     }
 
@@ -66,6 +66,38 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
 
     @Override
     public void update(String[] changes) {
+        // changes = TID / 업무명 / 상태 / 담당자ID / 마감일
+        // 자료형 = String / String / TaskStatus / Member / LocalDate
+
+        // [1] TID로 해당 Task 인스턴스 찾아오기
+        Task targetTask = get(changes[0]);
+        // [2] 입력값 바탕으로 각 필드 수정
+        if (!changes[1].equals("@")) { // [A] 업무명 수정
+            targetTask.setName(changes[1]);
+        }
+        if (!changes[2].equals("@")) { // [B] 업무상태 수정
+            targetTask.setStatus(ConverterManager.stringTaskStatus.convertTo(changes[2]));
+        }
+        if (!changes[3].equals("@")) { // [C] 담당자 수정
+            // [C-1] 기존 담당자가 있는지 체크, 있다면 수정된 업무 그의 tasks에서 제거
+            Member prevAssignee = targetTask.getAssignee();
+            if (prevAssignee != null) {
+                prevAssignee.removeTask(targetTask);
+            }
+
+            // [C-2] 다음 담당자 찾아서 그의 tasks에 추가
+            // [추가예정] mid로 담당자 찾지 못했을 경우 구현해야 함
+            Member nextAssignee = Team.getInstance().controller.get(changes[3]);
+            nextAssignee.addTask(targetTask);
+
+            // [C-3] 지금 업무의 담당자 수정
+            targetTask.setAssignee(nextAssignee);
+        }
+        if (!changes[4].equals("@")) { // [D] 마감일 수정
+            targetTask.setDueTo(ConverterManager.stringDate.convertTo(changes[4]));
+        }
+        // [3] 해당 Task의 updatedAt 필드 최신화
+        targetTask.updateTime();
     }
 
     @Override

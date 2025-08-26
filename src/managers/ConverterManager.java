@@ -1,9 +1,6 @@
 package managers;
 
-import managers.conversion.Converter;
-import managers.conversion.StringDateConverter;
-import managers.conversion.StringDateTimeConverter;
-import managers.conversion.StringTaskTypeConverter;
+import managers.conversion.*;
 
 // [ ConverterManager 클래스 설명 ]
 // - ConverterManager Converter류 클래스들을 일괄 관리하고 전역에서 호출하기 위한 클래스임다.
@@ -18,4 +15,5 @@ public class ConverterManager extends Manager<Converter> {
     public static StringDateConverter stringDate = new StringDateConverter();
     public static StringDateTimeConverter stringDateTime = new StringDateTimeConverter();
     public static StringTaskTypeConverter stringTaskType = new StringTaskTypeConverter();
+    public static StringTaskStatusConverter stringTaskStatus = new StringTaskStatusConverter();
 }

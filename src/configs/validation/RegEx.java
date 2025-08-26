@@ -11,11 +11,16 @@ package configs.validation;
 
 public enum RegEx {
     ADD_TASK_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+$"),
-
-    ADD_TASK_NAME("^[가-힣a-zA-Z0-9]{1,10}$"),
+    ADD_TASK_NAME("^[가-힣a-zA-Z0-9]{1,15}$"),
     ADD_TASK_TYPE("^[1-4]$"),
     ADD_TASK_ASSIGNEE("^m(0[1-9]|[1-9][0-9])|@$"),
-    ADD_TASK_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$");
+    ADD_TASK_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$"),
+    UPDATE_TASK_INFO_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+/[^/]+$"),
+    UPDATE_TASK_INFO_TID("^t(0[1-9]|[1-9][0-9])$"),
+    UPDATE_TASK_INFO_NAME("^[가-힣a-zA-Z0-9]{1,15}|@$"),
+    UPDATE_TASK_INFO_STATUS("^[1-3]|@$"),
+    UPDATE_TASK_INFO_ASSIGNEE("^m(0[1-9]|[1-9][0-9])|@$"),
+    UPDATE_TASK_INFO_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$");
 
     private String regEx;
 

@@ -3,6 +3,9 @@ package managers.conversion;
 import configs.project.TaskType;
 import model.team.Team;
 
+// [ StringTaskTypeConverter 클래스 설명 ]
+// - StringTaskTypeConverter는 String과 TaskType 타입 간의 변환용 클래스입니다.
+
 public class StringTaskTypeConverter extends Converter<String, TaskType>{
     @Override
     public TaskType convertTo(String target) {
