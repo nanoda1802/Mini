@@ -1,7 +1,6 @@
 package managers.messageBuild.ingredient;
 
 import managers.messageBuild.MessageBuilder;
-import utils.Pair;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class MemberListMessageBuilder extends MessageBuilder {
             """;
 
     @Override
-    public String build(Pair<String, List<Object>> ingredients) {
+    public String build(String format, List<String> ingredients) {
         return "";
     }
 

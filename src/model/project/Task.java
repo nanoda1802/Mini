@@ -2,25 +2,28 @@ package model.project;
 
 import configs.project.TaskStatus;
 import configs.project.TaskType;
+import managers.ConverterManager;
 import model.team.Member;
 
+import java.sql.Array;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Task {
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDate createdAt = LocalDate.now();
     private String tid;
     private String name;
     private TaskType type;
     private TaskStatus status = TaskStatus.NOT_STARTED;
-    private Member pic;
+    private Member assignee;
     private LocalDateTime updatedAt = LocalDateTime.now();
-    private LocalDateTime dueTo;
+    private LocalDate dueTo;
 
-    public Task(String tid, String name, TaskType type, Member pic, LocalDateTime dueTo) {
+    public Task(String tid, String name, TaskType type, Member assignee, LocalDate dueTo) {
         this.tid = tid;
         this.name = name;
         this.type = type;
-        this.pic = pic;
+        this.assignee = assignee;
         this.dueTo = dueTo;
     }
 
@@ -48,15 +51,15 @@ public class Task {
         this.status = status;
     }
 
-    public Member getPic() {
-        return pic;
+    public Member getAssignee() {
+        return assignee;
     }
 
-    public void setPic(Member pic) {
-        this.pic = pic;
+    public void setAssignee(Member assignee) {
+        this.assignee = assignee;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
@@ -64,11 +67,20 @@ public class Task {
         return updatedAt;
     }
 
-    public LocalDateTime getDueTo() {
+    public LocalDate getDueTo() {
         return dueTo;
     }
 
-    public void setDueTo(LocalDateTime dueTo) {
+    public void setDueTo(LocalDate dueTo) {
         this.dueTo = dueTo;
+    }
+
+    public void updateTime() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public String toString() {
+        return tid + "/" + name + "/" + type + "/" + status + "/" + (assignee != null ? assignee.getName() : "미정") + "/" + ConverterManager.stringDate.convertFrom(createdAt) + "/" + (dueTo != null ? ConverterManager.stringDate.convertFrom(dueTo) : "미정");
     }
 }

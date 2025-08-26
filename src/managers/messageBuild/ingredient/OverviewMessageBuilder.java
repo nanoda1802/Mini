@@ -1,7 +1,6 @@
 package managers.messageBuild.ingredient;
 
 import managers.messageBuild.MessageBuilder;
-import utils.Pair;
 
 import java.util.List;
 
@@ -13,16 +12,9 @@ import java.util.List;
 // - 제작된 Overview는 MessageBuilder 공통 메서드인 integrate를 통해 RecentLogs와 병합됩니다.
 
 public class OverviewMessageBuilder extends MessageBuilder {
-    // [임시] format용 문자열 보관 위한 필드
-    private String format = """
-            [업무상태] 완료 %d | 진행 %d | 대기 %d | 전체 %d
-            [분업평가] %s | 업무보유율=■ | 미보유율=□
-                     가장 업무가 많은 팀원은 %s님이며, 현재 분업 현황 점수는 %.1f 점입니다.
-            """;
-
     @Override
-    public String build(Pair<String, List<Object>> ingredients) {
-        return "";
+    public String build(String format, List<String> ingredients) {
+        return String.format(format,ingredients.toArray());
     }
 
     @Override

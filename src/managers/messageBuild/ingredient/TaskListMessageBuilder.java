@@ -1,9 +1,10 @@
 package managers.messageBuild.ingredient;
 
+import configs.message.Ingredient;
 import managers.messageBuild.MessageBuilder;
-import utils.Pair;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 // [ TaskListMessageBuilder 클래스 설명 ]
 // - TaskListMessageBuilder는 "업무조회" 기능에서 각 업무정보를 표현할 Message 제작용 클래스입니다.
@@ -24,17 +25,21 @@ import java.util.List;
 //   = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 public class TaskListMessageBuilder extends MessageBuilder {
-    // [임시] format용 문자열 보관 위한 필드
-    private String format = """
-            = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-             No.%d [ %s ]
-              유형 : %s  |  상태 : %s  |  담당자 : %s
-              기간 : %s ~ %s
-            """;
-
     @Override
-    public String build(Pair<String, List<Object>> ingredients) {
-        return "";
+    public String build(String format, List<String> ingredients) {
+        // [메모] 람다에서도 넘버링하기 위한 변수 선언
+        AtomicInteger num = new AtomicInteger(0);
+
+        // [설명] 
+        // - ingredients는 각 Tasks들의 정보를 요약한 String들의 리스트
+        // - map을 통해 각 정보들을 순회하며 TaskList의 포맷에 맞게 변환
+        // - reduce를 통해 변환한 문자열들을 이어 붙임
+        // - 적절한 재료가 주어지지 않았을 경우 실패 케이스 문자열 반환
+        return ingredients.stream().map(ing -> {
+            String[] taskInfo = ing.split("/");
+            taskInfo[0] = num.incrementAndGet() + "";
+            return String.format(format, taskInfo);
+        }).reduce(MessageBuilder::integrate).orElseGet(Ingredient.TASK_LIST_FAILED::getFormat);
     }
 
     @Override

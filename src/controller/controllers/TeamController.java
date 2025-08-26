@@ -1,10 +1,16 @@
 package controller.controllers;
 
+import configs.team.Authority;
 import controller.*;
+import managers.ConverterManager;
+import model.project.Task;
 import model.team.Member;
+import utils.Pair;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 // [ TeamController 클래스 설명 ]
 // - TeamController는 Member 인스턴스들에 대한 CRUD 조작을 처리하기 위한 Controller 기반의 클래스임다.
@@ -25,22 +31,61 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
 
     @Override
     public void add(String[] infos) {
+        // infos = 팀원명 / 권한
+        // 자료형 = String / Authority
+
+        // [1] 항목별로 Team의 각 필드타입에 맞게 convert
+        String mid = createMID();
+        String name = infos[0];
+        Authority auth = ConverterManager.stringAuthority.convertTo(infos[1]);
+
+        // [2] 멤버 신규 인스턴스 생성
+        Member member = new Member(mid, name, auth);
+
+        // [3] members에 멤버 저장
+        members.put(mid, member);
     }
 
     @Override
     public Member get(String eid) {
-        return null;
+        return members.get(eid);
     }
 
     @Override
     public void update(String[] changes) {
+        // infos = 팀원ID / 팀원명 / 권한 / 담당업무(tid)
+        // 자료형 = String / String / Authority / String
+        // [1] 항목별로 Team의 각 필드타입에 맞게 convert
+        String name = changes[1];
+        Authority auth = ConverterManager.stringAuthority.convertTo(changes[2]);
+        String[] tids = changes[3].split(",");
+        ArrayList<Task> tasks = new ArrayList<>();
+        for (String tid : tids) {
+        }
+        // [2] mid로 해당 팀원 가져오기
+        // [3] 멤버 업데이트
     }
 
     @Override
     public void remove(String eid) {
     }
 
+    private String createMID() {
+        return index < 10 ? "m0" + index++ : "m" + index++;
+    }
+
     public Collection<Member> getAll() {
         return this.members.values();
+    }
+
+    /* 담당업무 보유 여부별 팀원 세기 (홈화면 overview에 활용) */
+    public Pair<Integer, Integer> countAssignment() {
+        // [1] 담당 업무가 있는 팀원 세기
+        int assigneeCount = (int) this.getAll().stream().filter(member -> {
+            Set<Task> tasks = member.getTasks();
+            return tasks != null && !tasks.isEmpty();
+        }).count(); // [변경예정] Math.toIntExact() 이 방법으로 형변환하기
+        // [2] Pair 반환 (업무보유자 수, 전체 팀원 수)
+        return new Pair<>(assigneeCount,members.size());
     }
 }

@@ -1,7 +1,10 @@
 package managers;
 
 import managers.validation.AddTaskValidator;
+import managers.validation.BrowseTasksValidator;
+import managers.validation.UpdateTaskInfoValidator;
 import managers.validation.Validator;
+import managers.validation.*;
 
 // [ ValidatorManager 클래스 설명 ]
 // - ValidatorManager는 Validator류 클래스들을 일괄 관리하고 전역에서 호출하기 위한 클래스임다.
@@ -13,9 +16,9 @@ import managers.validation.Validator;
 
 public class ValidatorManager extends Manager<Validator> {
     public static AddTaskValidator addTask = new AddTaskValidator();
-//  [추가 예정] public static UpdateTaskInfoValidator updateTaskInfo = new UpdateTaskInfoValidator();
-//  [추가 예정] public static BrowseTasksValidator browseTasks = new BrowseTasksValidator();
-//  [추가 예정] public static InviteMemberValidator inviteMember = new InviteMemberValidator();
-//  [추가 예정] public static UpdateMemberInfoValidator updateMemberInfo = new UpdateMemberInfoValidator();
+    public static UpdateTaskInfoValidator updateTaskInfo = new UpdateTaskInfoValidator();
+    public static BrowseTasksValidator browseTasks = new BrowseTasksValidator();
+    public static InviteMemberValidator inviteMember = new InviteMemberValidator();
+    public static UpdateMemberInfoValidator updateMemberInfo = new UpdateMemberInfoValidator();
 //  [추가 예정] public static BrowseMembersValidator browseMembers = new BrowseMembersValidator();
 }

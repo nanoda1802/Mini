@@ -10,7 +10,28 @@ package configs.validation;
 //   지금은 테스트를 위한 일괄 검증용 필드가 작성돼있슴다...
 
 public enum RegEx {
-    ADD_TASK("^[가-힣a-zA-Z0-9]{1,10}/[1234]/([가-힣]{1,4}|@)/((19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])|@)$");
+    ADD_TASK_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+$"),
+    ADD_TASK_NAME("^[가-힣a-zA-Z0-9]{1,15}$"),
+    ADD_TASK_TYPE("^[1-4]$"),
+    ADD_TASK_ASSIGNEE("^m(0[1-9]|[1-9][0-9])|@$"),
+    ADD_TASK_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$"),
+    UPDATE_TASK_INFO_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+/[^/]+$"),
+    UPDATE_TASK_INFO_TID("^t(0[1-9]|[1-9][0-9])$"),
+    UPDATE_TASK_INFO_NAME("^[가-힣a-zA-Z0-9]{1,15}|@$"),
+    UPDATE_TASK_INFO_STATUS("^[1-3]|@$"),
+    UPDATE_TASK_INFO_ASSIGNEE("^m(0[1-9]|[1-9][0-9])|@$"),
+    UPDATE_TASK_INFO_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$"),
+    BROWSE_TASKS_STRUCTURE("^\\s*\\d+,[^,/]+(\\s*/\\s*\\d+,[^,/]+){0,2}\\s*$"),
+    BROWSE_TASKS_CRITERIA("^[1-3]$"),
+    BROWSE_TASKS_CONDITION_TYPE("^[1-4]$"),
+    BROWSE_TASKS_CONDITION_STATUS("^[1-3]$"),
+    BROWSE_TASKS_CONDITION_MID("^m(0[1-9]|[1-9][0-9])|@$"),
+    MEMBER_INVITE_STRUCTURE("^[^/]+/[^/]+$"),
+    MEMBER_NAME("^[가-힣]{1,4}$"),
+    MEMBER_AUTH("^[1-3]$"),
+    MEMBER_UPDATE_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+$"),
+    MEMBER_MID("^m(0[1-9]|[1-9][0-9])|@$"),
+    TASK_TID("^t(0[1-9]|[1-9][0-9])$");
 
     private String regEx;
 

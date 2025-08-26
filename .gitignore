@@ -3,5 +3,7 @@
 /workspace.xml
 /bin/
 /out/
+/production/
 /.idea/
 *.iml
+*.class
