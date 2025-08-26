@@ -7,6 +7,8 @@ import model.team.Team;
 // - StringTaskTypeConverter는 String과 TaskType 타입 간의 변환용 클래스입니다.
 
 public class StringTaskTypeConverter extends Converter<String, TaskType>{
+    String[] type = {"기획","개발","디버그","기타"};
+
     @Override
     public TaskType convertTo(String target) {
         // [메모] 입력은 1234로 받기 때문에, 인덱스로는 1을 감산해줘야 함
@@ -15,6 +17,6 @@ public class StringTaskTypeConverter extends Converter<String, TaskType>{
 
     @Override
     public String convertFrom(TaskType target) {
-        return target.ordinal()+"";
+        return type[target.ordinal()];
     }
 }

@@ -1,18 +1,21 @@
 package functions.project;
 
+import configs.message.Ingredient;
 import configs.message.SystemMessage;
 import configs.message.UIMessage;
 import managers.MessageBuilderManager;
 import managers.ValidatorManager;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
+import managers.messageBuild.ingredient.TaskListMessageBuilder;
 import model.project.Project;
-import model.team.Team;
+import model.project.Task;
 import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 // [ ProjectFuncs 개요 ]
 // - "@@ 화면" 단계, @@은 각 기능의 한국 이름  ex) 업무등록 화면, 업무조회 화면, ...
@@ -41,7 +44,7 @@ public class ProjectFuncs {
             String uiMsg = uiBuilder.build(UIMessage.ADD_TASK.getMsg());
             String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
                     ? sysBuilder.build(SystemMessage.ADD_TASK.getMsg())
-                    : sysBuilder.build(new Pair<String, List<Object>>(SystemMessage.ADD_TASK_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+                    : sysBuilder.build(new Pair<>(SystemMessage.ADD_TASK_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
 
             Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
 
@@ -84,7 +87,7 @@ public class ProjectFuncs {
             String uiMsg = uiBuilder.build(UIMessage.UPDATE_TASK_INFO.getMsg());
             String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
                     ? sysBuilder.build(SystemMessage.UPDATE_TASK_INFO.getMsg())
-                    : sysBuilder.build(new Pair<String, List<Object>>(SystemMessage.UPDATE_TASK_INFO_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+                    : sysBuilder.build(new Pair<>(SystemMessage.UPDATE_TASK_INFO_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
 
             Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
 
@@ -114,6 +117,71 @@ public class ProjectFuncs {
 
     /* [ "업무조회" 선택 시 실행될 메서드 ] */
     public static void browseTasks() {
+        Pair<Boolean, String> alert = new Pair<>(true, "");  // [메모] System 메세지 갱신에 활용할 지역변수
+        // [1] 업무조회 화면 유지할 반복문 시작
+        while (true) {
+            // [Loop-1] UI와 System 문자열 제작해 출력
+            Viewer.clear();
+
+            UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+            SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+            String uiMsg = uiBuilder.build(UIMessage.BROWSE_TASKS.getMsg());
+            String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
+                    ? sysBuilder.build(SystemMessage.BROWSE_TASKS.getMsg())
+                    : sysBuilder.build(new Pair<>(SystemMessage.BROWSE_TASKS_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+
+            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+
+            // [Loop-2] 사용자의 입력
+            String input = InputReader.read();
+
+            // [Loop-2-A] 특정 번호 입력 시 홈 화면으로 복귀
+            if (input.equals("486")) {
+                return;
+            }
+
+            // [Loop-3] 입력값에 대한 유효성 검사
+            Pair<Boolean, String> checkResult = ValidatorManager.browseTasks.check(input);
+            // [Loop-4] 검사 결과를 alert에 할당
+            alert = checkResult;
+            // [Loop-End] 검사 통과했다면 반복문 탈출
+            if (checkResult.getKey()) break;
+
+        }
+        // [2] 조건에 해당하는 업무 목록 화면으로 이동
+        showFilteredTasks(alert.getValue().split("/"));
+    }
+
+    /* "업무조회" 파생 화면 -> 업무 목록 출력 */
+    public static void showFilteredTasks(String[] inputs) {
+        // [1] Project에서 조건에 해당하는 Task들의 정보 추출
+        Stream<Task> browsing = Project.getInstance().controller.browse(inputs);
+        List<String> filteredTasks = browsing.map(Task::toString).toList();
+
+        // [2] 필터링된 정보들로 재료 메세지 제작
+        TaskListMessageBuilder taskListBuilder = MessageBuilderManager.taskList;
+        String messageIngredients = taskListBuilder.build(new Pair<>(Ingredient.TASK_LIST.getFormat(), filteredTasks));
+
+        // [3] 재료 메세지들로 최종 메세지 제작
+        UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+        SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+        String uiMsg = uiBuilder.build(new Pair<>(UIMessage.BROWSE_TASKS_RESPOND.getMsg(), List.of(messageIngredients)));
+        String sysMsg = sysBuilder.build(SystemMessage.BROWSE_TASKS_RESPOND.getMsg());
+
+        // [4] 업무목록 화면 유지 위한 반복문 시작
+        while (true) {
+            // [Loop-1] 갈무리한 업무 목록 출력
+            Viewer.clear();
+            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+            // [Loop-2] 사용자의 입력
+            String input = InputReader.read();
+            // [Loop-2-A] 특정 번호 입력 시 홈 화면으로 복귀
+            if (input.equals("486")) {
+                return;
+            }
+        }
     }
 }
 

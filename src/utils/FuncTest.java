@@ -19,7 +19,8 @@ public class FuncTest {
     public static void addDummyTasks() {
         for (int i = 1; i <= dummyCount; i++) {
             String name = i < 10 ? "프로젝트0" + i : "프로젝트" + i;
-            Project.getInstance().controller.add(new String[]{name, "4", "@", "20251225"});
+            String type = i < 10 ? "2" : "4";
+            Project.getInstance().controller.add(new String[]{name, type, "@", "20251225"});
         }
     }
 

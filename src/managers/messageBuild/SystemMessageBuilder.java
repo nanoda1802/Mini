@@ -18,8 +18,8 @@ import java.util.List;
 
 public class SystemMessageBuilder extends MessageBuilder {
     @Override
-    public String build(Pair<String, List<Object>> ingredients) {
-        return String.format(ingredients.getKey(), ingredients.getValue().stream().map(ing -> (String) ing).toArray());
+    public String build(Pair<String, List<String>> ingredients) {
+        return String.format(ingredients.getKey(), ingredients.getValue().toArray());
     }
 
     @Override

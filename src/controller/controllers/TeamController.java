@@ -46,7 +46,7 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
 
     @Override
     public Member get(String eid) {
-        return null;
+        return members.get(eid);
     }
 
     @Override

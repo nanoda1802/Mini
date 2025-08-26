@@ -2,8 +2,10 @@ package model.project;
 
 import configs.project.TaskStatus;
 import configs.project.TaskType;
+import managers.ConverterManager;
 import model.team.Member;
 
+import java.sql.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -77,9 +79,8 @@ public class Task {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // [메모] 기능 test 용도
     @Override
     public String toString() {
-        return "\n< "+tid +" >"+ "\n업무명 : "+name + "\n유형 : "+type + "\n상태 : "+status + "\n담당자 : "+assignee +"\n생성일 : "+createdAt +"\n수정일 : "+updatedAt + "\n마감일 : "+dueTo;
+        return tid + "/" + name + "/" + type + "/" + status + "/" + (assignee != null ? assignee.getName() : "미정") + "/" + ConverterManager.stringDate.convertFrom(createdAt) + "/" + (dueTo != null ? ConverterManager.stringDate.convertFrom(dueTo) : "미정");
     }
 }

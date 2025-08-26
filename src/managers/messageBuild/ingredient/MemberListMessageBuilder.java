@@ -27,7 +27,7 @@ public class MemberListMessageBuilder extends MessageBuilder {
             """;
 
     @Override
-    public String build(Pair<String, List<Object>> ingredients) {
+    public String build(Pair<String, List<String>> ingredients) {
         return "";
     }
 
