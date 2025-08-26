@@ -12,8 +12,8 @@ import java.util.List;
 
 public class UIMessageBuilder extends MessageBuilder {
     @Override
-    public String build(Pair<String, List<Object>> ingredients) {
-        return "메서드를 완성해주세여";
+    public String build(Pair<String, List<String>> ingredients) {
+        return String.format(ingredients.getKey(), ingredients.getValue().toArray());
     }
 
     @Override

@@ -38,8 +38,7 @@ public enum SystemMessage {
             " %s "
             정보를 재입력해주세요. 기능 선택으로 돌아가시려면 486 을 입력해주세요.
             """),
-    BROWSE_TASKS_REMOVE("""
-            제거하실 업무가 있다면 넘버링된 숫자를 입력해주세요.
+    BROWSE_TASKS_RESPOND("""
             기능 선택으로 돌아가시려면 486 을 입력해주세요.
             """),
     INVITE_MEMBER("""
@@ -66,8 +65,7 @@ public enum SystemMessage {
             " %s "
             정보를 재입력해주세요. 기능 선택으로 돌아가시려면 486 을 입력해주세요.
             """),
-    BROWSE_MEMBERS_DISMISS("""
-            해임하실 팀원이 있다면 넘버링된 숫자를 입력해주세요.
+    BROWSE_MEMBERS_RESPOND("""
             기능 선택으로 돌아가시려면 486 을 입력해주세요.
             """);
 

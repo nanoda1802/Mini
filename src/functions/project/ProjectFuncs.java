@@ -1,18 +1,21 @@
 package functions.project;
 
+import configs.message.Ingredient;
 import configs.message.SystemMessage;
 import configs.message.UIMessage;
 import managers.MessageBuilderManager;
 import managers.ValidatorManager;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
+import managers.messageBuild.ingredient.TaskListMessageBuilder;
 import model.project.Project;
-import model.team.Team;
+import model.project.Task;
 import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 // [ ProjectFuncs 개요 ]
 // - "@@ 화면" 단계, @@은 각 기능의 한국 이름  ex) 업무등록 화면, 업무조회 화면, ...
@@ -147,14 +150,38 @@ public class ProjectFuncs {
 
         }
         // [2] 조건에 해당하는 업무 목록 화면으로 이동
-        showSelectedTasks(alert.getValue().split("/"));
+        showFilteredTasks(alert.getValue().split("/"));
     }
 
     /* "업무조회" 파생 화면 -> 업무 목록 출력 */
-    public static void showSelectedTasks(String[] inputs) {
-        Viewer.print("잘 넘어왔어요");
-        // 메세지 만들고
-        // 출력
+    public static void showFilteredTasks(String[] inputs) {
+        // [1] Project에서 조건에 해당하는 Task들의 정보 추출
+        Stream<Task> browsing = Project.getInstance().controller.browse(inputs);
+        List<String> filteredTasks = browsing.map(Task::toString).toList();
+
+        // [2] 필터링된 정보들로 재료 메세지 제작
+        TaskListMessageBuilder taskListBuilder = MessageBuilderManager.taskList;
+        String messageIngredients = taskListBuilder.build(new Pair<>(Ingredient.TASK_LIST.getFormat(), filteredTasks));
+
+        // [3] 재료 메세지들로 최종 메세지 제작
+        UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+        SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+        String uiMsg = uiBuilder.build(new Pair<>(UIMessage.BROWSE_TASKS_RESPOND.getMsg(), List.of(messageIngredients)));
+        String sysMsg = sysBuilder.build(SystemMessage.BROWSE_TASKS_RESPOND.getMsg());
+
+        // [4] 업무목록 화면 유지 위한 반복문 시작
+        while (true) {
+            // [Loop-1] 갈무리한 업무 목록 출력
+            Viewer.clear();
+            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+            // [Loop-2] 사용자의 입력
+            String input = InputReader.read();
+            // [Loop-2-A] 특정 번호 입력 시 홈 화면으로 복귀
+            if (input.equals("486")) {
+                return;
+            }
+        }
     }
 }
 

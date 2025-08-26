@@ -36,7 +36,7 @@ public class TeamFuncs {
             String uiMsg = uiBuilder.build(UIMessage.INVITE_MEMBER.getMsg());
             String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
                     ? sysBuilder.build(SystemMessage.INVITE_MEMBER.getMsg())
-                    : sysBuilder.build(new Pair<String, List<Object>>(SystemMessage.INVITE_MEMBER_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+                    : sysBuilder.build(new Pair<>(SystemMessage.INVITE_MEMBER_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
 
             Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
 
