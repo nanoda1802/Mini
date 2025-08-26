@@ -1,6 +1,8 @@
 package controller.controllers;
 
+import configs.team.Authority;
 import controller.*;
+import managers.ConverterManager;
 import model.team.Member;
 
 import java.util.Collection;
@@ -25,6 +27,19 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
 
     @Override
     public void add(String[] infos) {
+        // infos = 팀원명 / 권한
+        // 자료형 = String / Authority
+
+        // [1] 항목별로 Team의 각 필드타입에 맞게 convert
+        String mid =  createMID();
+        String name = infos[0];
+        Authority auth = ConverterManager.stringAuthority.convertTo(infos[1]);
+        
+        // [2] 멤버 신규 인스턴스 생성
+        Member member = new Member(mid, name, auth);
+        
+        // [3] members에 멤버 저장
+        members.put(mid, member);
     }
 
     @Override
@@ -38,6 +53,9 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
 
     @Override
     public void remove(String eid) {
+    }
+    private String createMID(){
+        return  index < 10 ? "m0" + index++ : "m" + index++;
     }
 
     public Collection<Member> getAll() {

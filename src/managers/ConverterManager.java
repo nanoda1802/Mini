@@ -16,4 +16,5 @@ public class ConverterManager extends Manager<Converter> {
     public static StringDateTimeConverter stringDateTime = new StringDateTimeConverter();
     public static StringTaskTypeConverter stringTaskType = new StringTaskTypeConverter();
     public static StringTaskStatusConverter stringTaskStatus = new StringTaskStatusConverter();
+    public static StringAuthorityConverter stringAuthority = new StringAuthorityConverter();
 }
