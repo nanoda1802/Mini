@@ -50,6 +50,8 @@ public class TeamFuncs {
 
             // [Loop-3] 사용자의 입력에 대한 유효성 검사
             alert = ValidatorManager.inviteMember.check(input);
+
+            // [Loop-4] 유효성 검사 통과시 데이터 저장
             if (alert.getKey()){
                 Team.getInstance().controller.add(alert.getValue().split("/"));
             }
@@ -59,6 +61,35 @@ public class TeamFuncs {
 
     /* [ "팀원정보수정" 선택 시 실행될 메서드 ] */
     public static void updateMemberInfo() {
+        Pair<Boolean, String> alert = new Pair<>(true, "");  // [메모] System 메세지 갱신에 활용할 지역변수
+        // [1] 업무등록 화면 유지할 반복문 시작
+        while (true) {
+            // [Loop-1] UI와 System 문자열 제작해 출력
+            Viewer.clear();
+
+            UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+            SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+            String uiMsg = uiBuilder.build(UIMessage.UPDATE_MEMBER_INFO.getMsg());
+            String sysMsg = alert.getKey() // [메모] alert의 key에는 유효성 검사 결과 bool 값이 담김, 이를 기준으로 다른 분기의 System 메세지 출력
+                    ? sysBuilder.build(SystemMessage.UPDATE_MEMBER_INFO.getMsg())
+                    : sysBuilder.build(new Pair<String, List<Object>>(SystemMessage.UPDATE_MEMBER_INFO_FAILED.getMsg(), sysBuilder.pack(alert.getValue())));
+
+            Viewer.print(sysBuilder.integrate(uiMsg, sysMsg));
+
+            // [Loop-2] 특정 문자가 입력되면 홈 화면으로 복귀
+            String input = InputReader.read();
+            if(input.equals("486")) return;
+
+            // [Loop-3] 사용자의 입력에 대한 유효성 검사
+            alert = ValidatorManager.updateMemberInfo.check(input);
+
+            // [Loop-4] 유효성 검사 통과시 데이터 저장
+            if (alert.getKey()){
+                Team.getInstance().controller.update(alert.getValue().split("/"));
+            }
+
+        }
     }
 
     /* [ "팀원조회" 선택 시 실행될 메서드 ] */
