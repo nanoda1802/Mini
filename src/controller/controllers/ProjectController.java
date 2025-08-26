@@ -57,8 +57,8 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
         tasks.put(tid,newTask);
 
         // [3-A] 만약 담당자 항목이 입력됐다면, 해당 Member 인스턴스의 tasks에도 Add
-        if (!infos[2].equals("@")) {
-            Team.getInstance().controller.get(infos[2]).addTask(newTask);
+        if (assignee != null) {
+            assignee.addTask(newTask);
         }
     }
 
@@ -87,7 +87,9 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
             // [C-2] 다음 담당자 찾아서 그의 tasks에 추가
             // [추가예정] mid로 담당자 찾지 못했을 경우 구현해야 함
             Member nextAssignee = Team.getInstance().controller.get(changes[3]);
-            nextAssignee.addTask(targetTask);
+            if (nextAssignee != null) {
+                nextAssignee.addTask(targetTask);
+            }
 
             // [C-3] 지금 업무의 담당자 수정
             targetTask.setAssignee(nextAssignee);

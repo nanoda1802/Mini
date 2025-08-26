@@ -26,7 +26,7 @@ public enum FailureReason {
     BROWSE_TASKS_DUPLICATED("하나의 기준을 여러 번 설정할 수 없습니다."),
     BROWSE_TASKS_CONDITION_TYPE("유형 조건은 숫자 1,2,3,4 중 하나만 입력 가능합니다."),
     BROWSE_TASKS_CONDITION_STATUS("상태 조건은 숫자 1,2,3 중 하나만 입력 가능합니다."),
-    BROWSE_TASKS_CONDITION_MID("팀원ID는 m02, m33 등의 형태로만 입력 가능합니다.");
+    BROWSE_TASKS_CONDITION_MID("팀원ID는 m02, m33 등의 형태로만 입력 가능합니다."),
     MEMBER_INVITE_STRUCTURE("\"항목1 / 항목2\" 형태로 입력해주세요."),
     MEMBER_MID("팀원ID는 m02, m33 등의 형태로만 입력 가능합니다."),
     MEMBER_NAME("팀원명은 4자 이하의 한글로만 입력 가능합니다."),

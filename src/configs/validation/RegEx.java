@@ -25,7 +25,7 @@ public enum RegEx {
     BROWSE_TASKS_CRITERIA("^[1-3]$"),
     BROWSE_TASKS_CONDITION_TYPE("^[1-4]$"),
     BROWSE_TASKS_CONDITION_STATUS("^[1-3]$"),
-    BROWSE_TASKS_CONDITION_MID("^m(0[1-9]|[1-9][0-9])|@$");
+    BROWSE_TASKS_CONDITION_MID("^m(0[1-9]|[1-9][0-9])|@$"),
     MEMBER_INVITE_STRUCTURE("^[^/]+/[^/]+$"),
     MEMBER_NAME("^[가-힣]{1,4}$"),
     MEMBER_AUTH("^[1-3]$"),
