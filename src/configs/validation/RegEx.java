@@ -23,7 +23,10 @@ public enum RegEx {
     UPDATE_TASK_INFO_DUE("^((20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|@)$"),
     MEMBER_INVITE_STRUCTURE("^[^/]+/[^/]+$"),
     MEMBER_NAME("^[가-힣]{1,4}$"),
-    MEMBER_AUTH("^[1-3]$");
+    MEMBER_AUTH("^[1-3]$"),
+    MEMBER_UPDATE_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+$"),
+    MEMBER_MID("^m(0[1-9]|[1-9][0-9])|@$"),
+    TASK_TID("^t(0[1-9]|[1-9][0-9])$");
 
     private String regEx;
 
