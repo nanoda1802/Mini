@@ -5,6 +5,9 @@ import configs.validation.RegEx;
 import utils.Pair;
 
 import java.util.regex.Pattern;
+// [InviteMemberValidator 클래스]
+// - 팀원 초대 기능의 입력값에 대한 유효성 검사용 클래스입니다.
+
 
 public class InviteMemberValidator extends Validator {
     @Override

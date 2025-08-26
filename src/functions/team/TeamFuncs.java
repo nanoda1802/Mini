@@ -12,11 +12,13 @@ package functions.team;
 
 import configs.message.SystemMessage;
 import configs.message.UIMessage;
+import controller.controllers.TeamController;
 import managers.MessageBuilderManager;
 import managers.ValidatorManager;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
 import managers.validation.InviteMemberValidator;
+import model.team.Team;
 import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
@@ -48,6 +50,10 @@ public class TeamFuncs {
 
             // [Loop-3] 사용자의 입력에 대한 유효성 검사
             alert = ValidatorManager.inviteMember.check(input);
+            if (alert.getKey()){
+                Team.getInstance().controller.add(alert.getValue().split("/"));
+            }
+
         }
     }
 
