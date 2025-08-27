@@ -23,7 +23,7 @@ public class LogRecorder {
     }
 
     public static String getRecentLogs() {
-        return logRepo.stream().sorted(Comparator.reverseOrder()).limit(5).reduce(MessageBuilder::integrate).orElseGet(()->"RecentLogs 제작 실패!");
+        return logRepo.stream().sorted(Comparator.reverseOrder()).limit(5).reduce(MessageBuilder::integrate).orElseGet(()->"기록된 활동이 없습니다!");
     }
 
 }

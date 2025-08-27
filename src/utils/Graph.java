@@ -9,6 +9,6 @@ package utils;
 public class Graph {
     public static String draw(int cnt, int total) {
         int ratioByTen = (int) Math.floor((double) cnt / total * 10);
-        return "■".repeat(ratioByTen) + "□".repeat(10 - ratioByTen) + " | " + ratioByTen + "%";
+        return "■".repeat(ratioByTen) + "□".repeat(10 - ratioByTen) + " | " + ratioByTen * 10 + "%";
     }
 }

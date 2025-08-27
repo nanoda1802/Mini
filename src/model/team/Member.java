@@ -47,6 +47,7 @@ public class Member {
 
     public void addTask(Task task) {
         this.tasks.add(task);
+        task.setAssignee(this);
     }
 
     public void removeTask(Task task) {

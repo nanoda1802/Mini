@@ -1,10 +1,8 @@
 package controller.controllers;
 
-import configs.project.TaskStatus;
 import configs.project.TaskType;
 import controller.*;
 import managers.ConverterManager;
-import model.project.Project;
 import model.project.Task;
 import model.team.Member;
 import model.team.Team;
@@ -28,7 +26,7 @@ import java.util.stream.Stream;
 // - "업무조회" 기능 관련해, 보류된 필드에 대한 출력값 설정이 필요합니다.
 //      ex) name=비품구매/type=기타/status=진행/assignee=null" -> 콘솔화면에서 assignee는 "미정"으로...?
 
-public class ProjectController extends Controller implements Adder, Getter<Task>, Updater, Remover {
+public class ProjectController extends Controller implements Adder<Task>, Getter<Task>, Updater, Remover {
     private Map<String, Task> tasks;
     private long index = 1;
 
@@ -38,7 +36,7 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
 
     /* Create 담당 */
     @Override
-    public void add(String[] infos) {
+    public Task add(String[] infos) {
         // infos = 업무명 / 유형 / 담당자ID / 마감일
         // 자료형 = String / TaskType / Member / LocalDate
 
@@ -64,6 +62,8 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
         if (assignee != null) {
             assignee.addTask(newTask);
         }
+
+        return newTask;
     }
 
     /* Update 담당 */
@@ -114,6 +114,11 @@ public class ProjectController extends Controller implements Adder, Getter<Task>
     /* Delete 담당 */
     @Override
     public void remove(String tid) {
+        Task target = tasks.get(tid);
+        Member assignee = target.getAssignee();
+        if (assignee != null) {
+            assignee.removeTask(target);
+        }
         tasks.remove(tid);
     }
 

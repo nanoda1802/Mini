@@ -16,6 +16,8 @@ public class Pair<K, V> {
     public V getValue() {
         return value;
     }
+
+    public void setValue(V value) {this.value = value;}
 }
 
 // [ Pair 클래스 설명 ]

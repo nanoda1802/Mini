@@ -29,7 +29,7 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
     }
 
     @Override
-    public void add(String[] infos) {
+    public Member add(String[] infos) {
         // infos = 팀원명 / 권한
         // 자료형 = String / Authority
 
@@ -43,6 +43,8 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
 
         // [3] members에 멤버 저장
         members.put(mid, member);
+
+        return  member;
     }
 
     @Override
