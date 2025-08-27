@@ -3,6 +3,7 @@ package controller.controllers;
 import configs.team.Authority;
 import controller.*;
 import managers.ConverterManager;
+import model.project.Project;
 import model.project.Task;
 import model.team.Member;
 import utils.Pair;
@@ -56,18 +57,31 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         // infos = 팀원ID / 팀원명 / 권한 / 담당업무(tid)
         // 자료형 = String / String / Authority / String
         // [1] 항목별로 Team의 각 필드타입에 맞게 convert
+        String mid = changes[0];
+        Member member = get(mid);
+        if(member == null) {return;}
         String name = changes[1];
         Authority auth = ConverterManager.stringAuthority.convertTo(changes[2]);
-        String[] tids = changes[3].split(",");
-        ArrayList<Task> tasks = new ArrayList<>();
-        for (String tid : tids) {
+        // [2] tid로 해당 팀원에게 업무 할당
+        if(!changes[3].equals("@")){
+            String[] tids = changes[3].split(",");
+            for (String tid : tids) {
+                Task task = Project.getInstance().controller.get(tid);
+                member.addTask(task);
+            }
         }
-        // [2] mid로 해당 팀원 가져오기
-        // [3] 멤버 업데이트
+        // [3] 다른 요소 업데이트
+        if(!changes[1].equals("@")){
+            member.setName(name);
+        }
+        if(!changes[2].equals("@")){
+            member.setAuth(auth);
+        }
     }
 
     @Override
     public void remove(String eid) {
+        members.remove(eid);
     }
 
     private String createMID() {
