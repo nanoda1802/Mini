@@ -8,10 +8,8 @@ import model.project.Task;
 import model.team.Member;
 import utils.Pair;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 // [ TeamController 클래스 설명 ]
 // - TeamController는 Member 인스턴스들에 대한 CRUD 조작을 처리하기 위한 Controller 기반의 클래스임다.
@@ -117,5 +115,29 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         }).count(); // [변경예정] Math.toIntExact() 이 방법으로 형변환하기
         // [2] Pair 반환 (업무보유자 수, 전체 팀원 수)
         return new Pair<>(assigneeCount,members.size());
+    }
+    /* 조건에 부합하는 Member의 정보를 추출하는 메서드 */
+    public Stream<Member> browse(String[] inputs) {
+        Stream<Member> filtering = this.getAll().stream();
+        if(inputs[0].equals("@")){
+            return filtering;
+        }
+
+        List<String> filters = Arrays.asList(inputs);
+
+        return filtering.filter(m ->{
+            // 해당 조건을 골랐을 때 해당 조건과 맞지 않으면 바로 false 반환
+            // 전부 조건 마다 and로 기능
+            if(filters.contains("1") && m.getAuth() != Authority.ADMIN) return false;
+            if(filters.contains("2") && m.getAuth() != Authority.MEMBER) return false;
+            if(filters.contains("3") && m.getAuth() != Authority.VIEWER) return false;
+
+            boolean hasTasks = !m.getTasks().isEmpty();
+            if(filters.contains("4") &&  !hasTasks) return false;
+            if(filters.contains("5") &&  hasTasks) return false;
+            return true;
+        });
+
+
     }
 }

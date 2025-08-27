@@ -19,6 +19,11 @@ public enum Ingredient {
               유형 : %s  |  상태 : %s  |  담당자 : %s
               기간 : %s ~ %s
             """),
+    MEMBER_LIST("""
+            = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+             No.%s [%s] %s | Tasks : %s (%s건)
+            """),
+    MEMBER_LIST_FAILED("조건에 부합하는 Member가 없습니다."),
     TASK_LIST_FAILED("\" 조건에 부합하는 Task가 존재하지 않습니다! \""),
     LOG_INVITE_MEMBER("%s  |  새로운 팀원 [ %s ] 님을 초대했습니다."),
     LOG_UPDATE_MEMBER_INFO("%s  |  [ %s ] 님의 정보를 수정했습니다."),

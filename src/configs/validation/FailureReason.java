@@ -28,10 +28,11 @@ public enum FailureReason {
     BROWSE_TASKS_CONDITION_STATUS("상태 조건은 숫자 1,2,3 중 하나만 입력 가능합니다."),
     BROWSE_TASKS_CONDITION_MID("팀원ID는 m02, m33 등의 형태로만 입력 가능합니다."),
     MEMBER_INVITE_STRUCTURE("\"항목1 / 항목2\" 형태로 입력해주세요."),
+    MEMBER_UPDATE_STRUCTURE("\"항목1 / 항목2 / 항목3 / 항목4\" 형태로 입력해주세요."),
+    MEMBER_BROWSE_CONDITION("조회 조건은 문자 \"@\"나 1,2 등의 형태로만 입력 가능합니다."),
     MEMBER_MID("팀원ID는 m02, m33 등의 형태로만 입력 가능합니다."),
     MEMBER_NAME("팀원명은 4자 이하의 한글로만 입력 가능합니다."),
     MEMBER_AUTH("권한은 숫자 1,2,3 중 하나만 입력 가능합니다."),
-    MEMBER_UPDATE_STRUCTURE("\"항목1 / 항목2 / 항목3 / 항목4\" 형태로 입력해주세요."),
     TASK_TID("업무ID는 t02, t33 등의 형태로만 입력 가능합니다.");
 
     private String reason;
