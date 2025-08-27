@@ -17,7 +17,9 @@ import managers.ValidatorManager;
 import managers.messageBuild.MessageBuilder;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
+import model.team.Member;
 import model.team.Team;
+import utils.FuncTest;
 import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
@@ -91,6 +93,8 @@ public class TeamFuncs {
 
     /* [ "팀원조회" 선택 시 실행될 메서드 ] */
     public static void browseMembers() {
+        System.out.println(Team.getInstance().controller.getAll());
+        if(InputReader.read().equals("486")) return;
     }
 
     // [보류] public static void setLeader() {}
