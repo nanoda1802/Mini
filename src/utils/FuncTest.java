@@ -1,10 +1,16 @@
 package utils;
 
+import configs.project.TaskStatus;
+import configs.team.Authority;
+import controller.controllers.ProjectController;
+import controller.controllers.TeamController;
 import model.project.Project;
 import model.project.Task;
 import model.team.Member;
 import model.team.Team;
 import utils.console.Viewer;
+
+import java.util.Random;
 
 // [ FuncTest 클래스 설명 ]
 // - FuncTest는 코드가 의도대로 작동하는지 확인하기 위한 클래스임다.
@@ -17,10 +23,13 @@ public class FuncTest {
 
     /* Project에 더미 데이터 추가 */
     public static void addDummyTasks() {
+        ProjectController pc = Project.getInstance().controller;
+
         for (int i = 1; i <= dummyCount; i++) {
             String name = i < 10 ? "프로젝트0" + i : "프로젝트" + i;
-            String type = i < 10 ? "2" : "4";
-            Project.getInstance().controller.add(new String[]{name, type, "@", "20251225"});
+            String type = "" + (new Random().nextInt(4) + 1);
+            Task dummy = pc.add(new String[]{name, type, "@", "20251225"});
+            dummy.setStatus(TaskStatus.values()[new Random().nextInt(3)]);
         }
     }
 
@@ -38,9 +47,17 @@ public class FuncTest {
 
     /* Team에 더미 데이터 추가 */
     public static void addDummyMembers() {
+        TeamController tc = Team.getInstance().controller;
+
         for (int i = 1; i <= dummyCount; i++) {
             String name = i < 10 ? "팀원0" + i : "팀원" + i;
-            Team.getInstance().controller.add(new String[]{name,(i%3)+1+""});
+            Member dummy = tc.add(new String[]{name,(i%3)+1+""});
+            dummy.setAuth(Authority.values()[new Random().nextInt(3)]);
+
+            // [메모] 업무가 없는 더미도 만들기 위해 10번까지만 Task 할당
+            if (i < 10) {
+                dummy.addTask(Project.getInstance().controller.get("t0" + i));
+            }
         }
     }
 
