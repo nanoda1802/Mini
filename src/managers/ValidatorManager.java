@@ -20,5 +20,5 @@ public class ValidatorManager extends Manager<Validator> {
     public static BrowseTasksValidator browseTasks = new BrowseTasksValidator();
     public static InviteMemberValidator inviteMember = new InviteMemberValidator();
     public static UpdateMemberInfoValidator updateMemberInfo = new UpdateMemberInfoValidator();
-//  [추가 예정] public static BrowseMembersValidator browseMembers = new BrowseMembersValidator();
+    public static BrowseMembersValidator browseMembers = new BrowseMembersValidator();
 }

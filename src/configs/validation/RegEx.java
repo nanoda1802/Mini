@@ -27,9 +27,10 @@ public enum RegEx {
     BROWSE_TASKS_CONDITION_STATUS("^[1-3]$"),
     BROWSE_TASKS_CONDITION_MID("^m(0[1-9]|[1-9][0-9])|@$"),
     MEMBER_INVITE_STRUCTURE("^[^/]+/[^/]+$"),
+    MEMBER_UPDATE_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+$"),
+    MEMBER_BROWSE_CONDITION("^(@|([1-5](,[1-5]){0,4}))$"),
     MEMBER_NAME("^[가-힣]{1,4}$"),
     MEMBER_AUTH("^[1-3]$"),
-    MEMBER_UPDATE_STRUCTURE("^[^/]+/[^/]+/[^/]+/[^/]+$"),
     MEMBER_MID("^m(0[1-9]|[1-9][0-9])|@$"),
     TASK_TID("^t(0[1-9]|[1-9][0-9])$");
 

@@ -3,6 +3,7 @@ package managers;
 import managers.messageBuild.MessageBuilder;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
+import managers.messageBuild.ingredient.MemberListMessageBuilder;
 import managers.messageBuild.ingredient.OverviewMessageBuilder;
 import managers.messageBuild.ingredient.TaskListMessageBuilder;
 
@@ -22,4 +23,5 @@ public class MessageBuilderManager extends Manager<MessageBuilder> {
     // [ 재료 MessageBuilder ]
     public static OverviewMessageBuilder overview = new OverviewMessageBuilder();
     public static TaskListMessageBuilder taskList = new TaskListMessageBuilder();
+    public static MemberListMessageBuilder memberList = new MemberListMessageBuilder();
 }
