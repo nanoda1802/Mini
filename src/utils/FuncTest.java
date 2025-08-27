@@ -17,11 +17,13 @@ public class FuncTest {
 
     /* Project에 더미 데이터 추가 */
     public static void addDummyTasks() {
-        for (int i = 1; i <= dummyCount; i++) {
-            String name = i < 10 ? "프로젝트0" + i : "프로젝트" + i;
-            String type = i < 10 ? "2" : "4";
-            Project.getInstance().controller.add(new String[]{name, type, "@", "20251225"});
-        }
+            Project.getInstance().controller.add(new String[]{"task1", "1", "@", "20251225"});
+            Project.getInstance().controller.add(new String[]{"task2", "1", "@", "20251225"});
+//        for (int i = 1; i <= dummyCount; i++) {
+//            String name = i < 10 ? "프로젝트0" + i : "프로젝트" + i;
+//            String type = i < 10 ? "2" : "4";
+//            Project.getInstance().controller.add(new String[]{name, type, "@", "20251225"});
+//        }
     }
 
     /* Project 현황 확인 */
@@ -38,10 +40,12 @@ public class FuncTest {
 
     /* Team에 더미 데이터 추가 */
     public static void addDummyMembers() {
-        for (int i = 1; i <= dummyCount; i++) {
-            String name = i < 10 ? "팀원0" + i : "팀원" + i;
-            Project.getInstance().controller.add(new String[]{"이 부분 채워주셔야 함다"});
-        }
+            Team.getInstance().controller.add(new String[]{"박기현","1"});
+            Team.getInstance().controller.add(new String[]{"이영화","1"});
+//        for (int i = 1; i <= dummyCount; i++) {
+//            String name = i < 10 ? "팀원0" + i : "팀원" + i;
+//            Team.getInstance().controller.add(new String[]{name,(i%3)+1+""});
+//        }
     }
 
     /* Team 현황 확인 */

@@ -61,22 +61,33 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         Member member = get(mid);
         if(member == null) {return;}
         String name = changes[1];
-        Authority auth = ConverterManager.stringAuthority.convertTo(changes[2]);
+        Authority auth = changes[2].equals("@") ?
+                member.getAuth() : ConverterManager.stringAuthority.convertTo(changes[2]);
+
         // [2] tid로 해당 팀원에게 업무 할당
         if(!changes[3].equals("@")){
             String[] tids = changes[3].split(",");
             for (String tid : tids) {
                 Task task = Project.getInstance().controller.get(tid);
-                member.addTask(task);
+                if(task != null) {
+                    member.addTask(task);
+
+                    // task에 이미 담당자가 있다면 담당자를 변경한다.
+                    Member oldAssignee = task.getAssignee();
+                    if(oldAssignee == null) {
+                        task.setAssignee(member);
+                    }else {
+                        changeAssignee(task, oldAssignee, member);
+                    }
+                }
             }
         }
         // [3] 다른 요소 업데이트
         if(!changes[1].equals("@")){
             member.setName(name);
         }
-        if(!changes[2].equals("@")){
-            member.setAuth(auth);
-        }
+        member.setAuth(auth);
+
     }
 
     @Override
@@ -92,6 +103,11 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         return this.members.values();
     }
 
+    // task의 담당자를 바꾸는 메소드, (task, 이전 담당자, 바꿀 담당자)
+    private void changeAssignee(Task task,Member oldAssignee,Member member){
+        oldAssignee.removeTask(task);
+        task.setAssignee(member);
+    }
     /* 담당업무 보유 여부별 팀원 세기 (홈화면 overview에 활용) */
     public Pair<Integer, Integer> countAssignment() {
         // [1] 담당 업무가 있는 팀원 세기

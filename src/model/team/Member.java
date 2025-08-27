@@ -4,6 +4,7 @@ import configs.team.Authority;
 import model.project.Task;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Member {
@@ -17,6 +18,7 @@ public class Member {
         this.mid = mid;
         this.name = name;
         this.auth = auth;
+        this.tasks = new HashSet<>();
     }
 
     public String getMid() {
@@ -53,5 +55,16 @@ public class Member {
 
     public LocalDate getStartDate() {
         return startDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "startDate=" + startDate +
+                ", mid='" + mid + '\'' +
+                ", name='" + name + '\'' +
+                ", auth=" + auth +
+                ", tasks=" + tasks +
+                '}';
     }
 }

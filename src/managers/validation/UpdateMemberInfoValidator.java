@@ -15,20 +15,20 @@ public class UpdateMemberInfoValidator extends Validator {
     public Pair<Boolean, String> check(String target) {
         // target = Mid / Name / Auth / Tid
         // [1] 입력값 구조 검사 (문자열/문자열/문자열/문자열)
-        boolean isStructureValid = Pattern.matches(RegEx.UPDATE_TASK_INFO_STRUCTURE.getPattern(),  target);
+        boolean isStructureValid = Pattern.matches(RegEx.MEMBER_UPDATE_STRUCTURE.getPattern(),  target);
         if (!isStructureValid) {
             return new Pair<>(false,FailureReason.MEMBER_UPDATE_STRUCTURE.getReason());
         }
         // [2] 항목별 유효성 검사
         String[] fields = target.split("/");
-        boolean isMidValid = Pattern.matches(RegEx.MEMBER_MID.getPattern(),  fields[0]);
-        boolean isNameValid = Pattern.matches(RegEx.UPDATE_TASK_INFO_NAME.getPattern(),  fields[1]);
-        boolean isAuthValid = Pattern.matches(RegEx.MEMBER_AUTH.getPattern(),  fields[2]);
+        boolean isMidValid =  Pattern.matches(RegEx.MEMBER_MID.getPattern(),  fields[0]);
+        boolean isNameValid = "@".equals(fields[1]) || Pattern.matches(RegEx.UPDATE_TASK_INFO_NAME.getPattern(), fields[1]);
+        boolean isAuthValid = "@".equals(fields[2]) || Pattern.matches(RegEx.MEMBER_AUTH.getPattern(),  fields[2]);
 
-        String[] tids =  fields[3].split("/");
+        String[] tids =  fields[3].split(",");
         boolean isTidValid = true;
         for(String tid : tids) {
-            isTidValid = Pattern.matches(RegEx.TASK_TID.getPattern(), tid);
+            isTidValid = "@".equals(tid) || Pattern.matches(RegEx.TASK_TID.getPattern(), tid);
             if (!isTidValid) {
                 return new Pair<>(false,FailureReason.TASK_TID.getReason());
             }
