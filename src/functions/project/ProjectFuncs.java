@@ -66,12 +66,12 @@ public class ProjectFuncs {
             // [Loop-4] 검증 성공 시 입력된 정보를 컨트롤러에 전달, 업무 생성 로그 기록
             if (alert.getKey()) {
                 String[] inputs = alert.getValue().split("/");
-                Project.getInstance().controller.add(inputs);
+                Task newTask = Project.getInstance().controller.add(inputs);
 
-                String taskName = inputs[0];
+                String taskName = newTask.getName();
                 LogRecorder.record(Ingredient.LOG_ADD_TASK,taskName);
                 // [메모] 시스템 메세지 갱신을 위해선 alert의 key가 false가 돼줘야 함...
-                alert = new Pair<>(false,String.format(Ingredient.ADD_TASK_SUCCESS.getFormat(),taskName));
+                alert = new Pair<>(false,String.format(Ingredient.ADD_TASK_SUCCESS.getFormat(),taskName,newTask.getTid()));
             }
         }
 
