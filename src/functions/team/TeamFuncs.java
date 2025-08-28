@@ -10,20 +10,31 @@ package functions.team;
 //    이 때, Task 인스턴스의 updatedAt에 대한 갱신도 잊지 않기! (자동으로 갱신되는 Util 메서드를 만드...?)
 // - 486을 입력해 홈 화면으로 복귀하는 기능은 구현되지 않았습니다!!
 
+import configs.message.Ingredient;
 import configs.message.SystemMessage;
 import configs.message.UIMessage;
+import controller.controllers.TeamController;
 import managers.MessageBuilderManager;
 import managers.ValidatorManager;
 import managers.messageBuild.MessageBuilder;
 import managers.messageBuild.SystemMessageBuilder;
 import managers.messageBuild.UIMessageBuilder;
+import managers.messageBuild.ingredient.MemberListMessageBuilder;
+import model.project.Project;
+import model.project.Task;
+import model.team.Member;
 import model.team.Team;
+import utils.LogRecorder;
 import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class TeamFuncs {
-    /* [ "팀원초대" 선택 시 실행될 메서드 ] */
+    /* [ "팀원초대" 선택 시 실행될 실행될 실행될 메서드 ] */
     public static void inviteMember() {
         Pair<Boolean, String> alert = new Pair<>(true, "");  // [메모] System 메세지 갱신에 활용할 지역변수
         // [1] 업무등록 화면 유지할 반복문 시작
@@ -50,7 +61,11 @@ public class TeamFuncs {
 
             // [Loop-4] 유효성 검사 통과시 데이터 저장
             if (alert.getKey()){
-                Team.getInstance().controller.add(alert.getValue().split("/"));
+                TeamController teamController = Team.getInstance().controller;
+                Member member = teamController.add(alert.getValue().split("/"));
+                String succeedMsg = sysBuilder.build(Ingredient.INVITE_MEMBER_SUCCESS.getFormat(), MessageBuilder.pack(member.getName(),member.getMid()));
+                LogRecorder.record(Ingredient.LOG_INVITE_MEMBER,member.getName());
+                alert = new Pair<>(false, succeedMsg);
             }
 
         }
@@ -78,20 +93,99 @@ public class TeamFuncs {
             String input = InputReader.read();
             if(input.equals("486")) return;
 
-            // [Loop-3] 사용자의 입력에 대한 유효성 검사
-            alert = ValidatorManager.updateMemberInfo.check(input);
-
-            // [Loop-4] 유효성 검사 통과시 데이터 저장
-            if (alert.getKey()){
-                Team.getInstance().controller.update(alert.getValue().split("/"));
+            // [Loop-3] 문자 형식을 확인해서 삭제/수정 중 어떤 기능 사용할지 분기
+            TeamController teamController = Team.getInstance().controller;
+            if(input.split("/").length > 1){
+                // [Con-1] 사용자의 입력에 대한 유효성 검사
+                alert = ValidatorManager.updateMemberInfo.check(input);
+                // [Con-1-1] 유효성 검사 통과시 데이터 저장
+                if (alert.getKey()){
+                    teamController.update(alert.getValue().split("/"));
+                    Member member = teamController.get(alert.getValue().split("/")[0]);
+                    String succeedMsg = sysBuilder.build(Ingredient.UPDATE_MEMBER_INFO_SUCCESS.getFormat(), MessageBuilder.pack(member.getName()));
+                    LogRecorder.record(Ingredient.LOG_UPDATE_MEMBER_INFO,member.getName());
+                    alert = new Pair<>(false, succeedMsg);
+                }
+            }else{
+                // [Con-2] 사용자 입력에 대한 유효성 검사
+                alert =  ValidatorManager.removeMembers.check(input);
+                // [Con-2-1] 유효성 검사 통과시 데이터 저장
+                if (alert.getKey()){
+                    if(teamController.get(alert.getValue()) != null) {
+                        String memberName = teamController.get(alert.getValue()).getName();
+                        teamController.remove(alert.getValue());
+                        String succeedMsg = sysBuilder.build(Ingredient.DISMISS_MEMBER_SUCCESS.getFormat(), MessageBuilder.pack(memberName));
+                        LogRecorder.record(Ingredient.LOG_DISMISS_MEMBER,memberName);
+                        alert = new Pair<>(false, succeedMsg);
+                    }else{
+                        String failedMsg = sysBuilder.build(Ingredient.DISMISS_MEMBER_FAILED.getFormat());
+                        alert = new Pair<>(false, failedMsg);
+                    }
+                }
             }
 
+
+
         }
+    }
+    public static void RemoveMembers(){
+
     }
 
     /* [ "팀원조회" 선택 시 실행될 메서드 ] */
     public static void browseMembers() {
+        Pair<Boolean, String> alert = new Pair<>(true, "");
+        while (true) {
+            // [Loop-1] UI와 System 문자열 제작해 출력
+            Viewer.clear();
+
+            UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+            SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+            String UiMsg = uiBuilder.build(UIMessage.BROWSE_MEMBERS.getMsg());
+            String sysMsg = alert.getKey()
+                    ? sysBuilder.build(SystemMessage.BROWSE_MEMBERS.getMsg())
+                    : sysBuilder.build(SystemMessage.BROWSE_MEMBERS_FAILED.getMsg(), MessageBuilder.pack(alert.getValue()));
+            Viewer.print(MessageBuilder.integrate(UiMsg, sysMsg));
+
+            String input = InputReader.read();
+            if (input.equals("486")) return;
+            alert = ValidatorManager.browseMembers.check(input);
+            if (alert.getKey()) {
+                showFilteredMembers(alert.getValue().split(","));
+            }
+
+        }
     }
+    /* "업무조회" 파생 화면 -> 업무 목록 출력 */
+    private static void showFilteredMembers(String[] inputs) {
+        // [1] 조건들로 값 추출 List<String>
+        Stream<Member> browsing = Team.getInstance().controller.browse(inputs);
+        List<String> filteredMembers = browsing.map(m ->{
+            String tasks = m.getTasks().isEmpty() ?
+                    ""
+                    : m.getTasks().stream().map(Task::getName).collect(Collectors.joining(","));
+            return String.format("%s/%s/%s/%s/%s",m.getMid(),m.getName(),m.getAuth(),tasks,m.getTasks().size()+"");
+        }).toList();
+
+        // [2] 값과 함께 재료 메시지 제작
+        MemberListMessageBuilder memberListMsgBuilder = MessageBuilderManager.memberList;
+        String messageIngredient = memberListMsgBuilder.build(Ingredient.MEMBER_LIST.getFormat(), filteredMembers);
+
+        // [3] 최종 메시지 제작(UI+재료+system)
+        UIMessageBuilder uiBuilder = MessageBuilderManager.ui;
+        SystemMessageBuilder sysBuilder = MessageBuilderManager.system;
+
+        String uiMsg = uiBuilder.build(UIMessage.BROWSE_MEMBERS_RESPOND.getMsg(), MessageBuilder.pack(messageIngredient));
+        String sysMsg = sysBuilder.build(SystemMessage.BROWSE_MEMBERS_RESPOND.getMsg());
+        // [4] 출력
+        Viewer.clear();
+        Viewer.print(MessageBuilder.integrate(uiMsg, sysMsg));
+
+        // [5] 특정 문자가 입력되면 이전 화면으로 복귀
+        String input = InputReader.read();
+        if(input.equals("486")) return;
+    }
+
 
     // [보류] public static void setLeader() {}
 }

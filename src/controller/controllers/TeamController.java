@@ -3,14 +3,13 @@ package controller.controllers;
 import configs.team.Authority;
 import controller.*;
 import managers.ConverterManager;
+import model.project.Project;
 import model.project.Task;
 import model.team.Member;
 import utils.Pair;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 // [ TeamController 클래스 설명 ]
 // - TeamController는 Member 인스턴스들에 대한 CRUD 조작을 처리하기 위한 Controller 기반의 클래스임다.
@@ -30,7 +29,7 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
     }
 
     @Override
-    public void add(String[] infos) {
+    public Member add(String[] infos) {
         // infos = 팀원명 / 권한
         // 자료형 = String / Authority
 
@@ -44,6 +43,8 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
 
         // [3] members에 멤버 저장
         members.put(mid, member);
+
+        return  member;
     }
 
     @Override
@@ -56,18 +57,53 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         // infos = 팀원ID / 팀원명 / 권한 / 담당업무(tid)
         // 자료형 = String / String / Authority / String
         // [1] 항목별로 Team의 각 필드타입에 맞게 convert
+        String mid = changes[0];
+        Member member = get(mid);
+        if(member == null) {return;}
         String name = changes[1];
-        Authority auth = ConverterManager.stringAuthority.convertTo(changes[2]);
-        String[] tids = changes[3].split(",");
-        ArrayList<Task> tasks = new ArrayList<>();
-        for (String tid : tids) {
+        Authority auth = changes[2].equals("@") ?
+                member.getAuth() : ConverterManager.stringAuthority.convertTo(changes[2]);
+
+        // [2] tid로 해당 팀원에게 업무 할당
+        if(!changes[3].equals("@")){
+            String[] tids = changes[3].split(",");
+            for (String tid : tids) {
+                Task task = Project.getInstance().controller.get(tid);
+                if(task != null) {
+                    member.addTask(task);
+
+                    // task에 이미 담당자가 있다면 담당자를 변경한다.
+                    Member oldAssignee = task.getAssignee();
+                    if(oldAssignee == null) {
+                        task.setAssignee(member);
+                    }else {
+                        changeAssignee(task, oldAssignee, member);
+                    }
+                }
+            }
         }
-        // [2] mid로 해당 팀원 가져오기
-        // [3] 멤버 업데이트
+        // [3] 다른 요소 업데이트
+        if(!changes[1].equals("@")){
+            member.setName(name);
+        }
+        member.setAuth(auth);
+
     }
 
     @Override
-    public void remove(String eid) {
+    public void remove(String mid) {
+
+        if(members.containsKey(mid)) {
+            if(members.get(mid).getTasks() != null) {
+                // 담당자로 배정된 task에서 해임한다.
+                Set<Task> tasks = members.get(mid).getTasks();
+                for(Task task : tasks) {
+                    task.setAssignee(null);
+                }
+            }
+            members.remove(mid);
+        }
+
     }
 
     private String createMID() {
@@ -78,6 +114,11 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         return this.members.values();
     }
 
+    // task의 담당자를 바꾸는 메소드 (task, 이전 담당자, 바꿀 담당자)
+    private void changeAssignee(Task task,Member oldAssignee,Member member){
+        oldAssignee.removeTask(task);
+        task.setAssignee(member);
+    }
     /* 담당업무 보유 여부별 팀원 세기 (홈화면 overview에 활용) */
     public Pair<Integer, Integer> countAssignment() {
         // [1] 담당 업무가 있는 팀원 세기
@@ -87,5 +128,35 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         }).count(); // [변경예정] Math.toIntExact() 이 방법으로 형변환하기
         // [2] Pair 반환 (업무보유자 수, 전체 팀원 수)
         return new Pair<>(assigneeCount,members.size());
+    }
+    /* 조건에 부합하는 Member의 정보를 추출하는 메서드 */
+    public Stream<Member> browse(String[] inputs) {
+        Stream<Member> filtering = this.getAll().stream();
+        if(inputs[0].equals("@")){
+            return filtering;
+        }
+
+        List<String> filters = Arrays.asList(inputs);
+
+        return filtering.filter(m ->{
+            // 해당 항목을 고른지 안 고른지 우선 판단
+            // 그 조건문 안에서 검사
+            boolean found = true;
+            if (filters.contains("1")||filters.contains("2")||filters.contains("3")) {
+                found = (filters.contains("1") && m.getAuth() == Authority.ADMIN)||
+                        (filters.contains("2") && m.getAuth() == Authority.MEMBER)||
+                        (filters.contains("3") && m.getAuth() == Authority.VIEWER);
+            }
+
+            boolean hasTasks = !m.getTasks().isEmpty();
+            boolean found2 = true;
+            if (filters.contains("4")||filters.contains("5")) {
+                found2 = (filters.contains("4") && hasTasks)||
+                        (filters.contains("5") &&  !hasTasks );
+            }
+            return found && found2;
+        });
+
+
     }
 }

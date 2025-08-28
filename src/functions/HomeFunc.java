@@ -31,6 +31,7 @@ public class HomeFunc {
     public static void start() {
         // [Test] 기능 테스트용 더미 데이터 추가
         FuncTest.addDummyTasks();
+        FuncTest.addDummyMembers();
 
 
         // [1] 프로그램 실행 동안 유지될 반복문 시작

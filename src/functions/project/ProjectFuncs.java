@@ -3,6 +3,8 @@ package functions.project;
 import configs.message.Ingredient;
 import configs.message.SystemMessage;
 import configs.message.UIMessage;
+import configs.validation.RegEx;
+import controller.controllers.ProjectController;
 import managers.MessageBuilderManager;
 import managers.ValidatorManager;
 import managers.messageBuild.MessageBuilder;
@@ -17,6 +19,7 @@ import utils.console.InputReader;
 import utils.console.Viewer;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 // [ ProjectFuncs 개요 ]
@@ -57,24 +60,19 @@ public class ProjectFuncs {
             if (input.equals("486")) {
                 return;
             }
-
             // [Loop-3] 입력값에 대한 유효성 검사
-            Pair<Boolean, String> checkResult = ValidatorManager.addTask.check(input);
-            // [Loop-3-A] 검사 결과가 true가 아니면 재입력 위해 continue
-            if (!checkResult.getKey()) {
-                alert = checkResult; // [메모] checkResult를 통해 alert에 { false, 실패 사유 } 전달
-                continue;
+            alert = ValidatorManager.addTask.check(input);
+
+            // [Loop-4] 검증 성공 시 입력된 정보를 컨트롤러에 전달, 업무 생성 로그 기록
+            if (alert.getKey()) {
+                String[] inputs = alert.getValue().split("/");
+                Task newTask = Project.getInstance().controller.add(inputs);
+
+                String taskName = newTask.getName();
+                LogRecorder.record(Ingredient.LOG_ADD_TASK,taskName);
+                // [메모] 시스템 메세지 갱신을 위해선 alert의 key가 false가 돼줘야 함...
+                alert = new Pair<>(false,String.format(Ingredient.ADD_TASK_SUCCESS.getFormat(),taskName,newTask.getTid()));
             }
-
-            // [Loop-4] 컨트롤러 호출해 검증된 입력값을 Add (split 해서)
-            String[] inputs = checkResult.getValue().split("/");
-            Project.getInstance().controller.add(inputs);
-
-            // [Loop-5] 업무등록 로그 기록 (전달한 input은 업무명)
-            LogRecorder.record(Ingredient.LOG_ADD_TASK,inputs[0]);
-
-            // [Loop-End] 홈 화면으로 복귀하기 위한 return
-            return;
         }
 
     }
@@ -105,23 +103,40 @@ public class ProjectFuncs {
                 return;
             }
 
-            // [Loop-3] 입력값에 대한 유효성 검사
-            Pair<Boolean, String> checkResult = ValidatorManager.updateTaskInfo.check(input);
-            // [Loop-3-A] 검사 결과가 true가 아니면 재입력 위해 continue
-            if (!checkResult.getKey()) {
-                alert = checkResult; // [메모] checkResult를 통해 alert에 { false, 실패 사유 } 전달
-                continue;
+            ProjectController pc = Project.getInstance().controller;
+
+            // [Loop-3] TID만 입력됐을 시 해당 업무 제거 시도
+            if (Pattern.matches(RegEx.UPDATE_TASK_INFO_TID.getPattern(),input)) {
+                Task targetTask = pc.get(input);
+                if (targetTask == null) {
+                    // [3 A] 제거할 업무 찾지 못했다는 메세지 전달
+                    alert = new Pair<>(false,Ingredient.REMOVE_TASK_FAILED.getFormat());
+                    continue;
+                } else {
+                    // [3 B] 제거에 성공했다는 메세지 전달 및 로그 기록
+                    String taskName = targetTask.getName();
+                    alert = new Pair<>(false,String.format(Ingredient.REMOVE_TASK_SUCCESS.getFormat(),taskName));
+                    LogRecorder.record(Ingredient.LOG_REMOVE_TASK,taskName);
+                    pc.remove(targetTask.getTid()); // [메모] 로그 저장을 먼저하지 않으면 에러 발생
+                    continue;
+                }
             }
 
-            // [Loop-4] 컨트롤러 호출해 검증된 입력값을 update (split 해서)
-            String[] inputs = checkResult.getValue().split("/");
-            Project.getInstance().controller.update(checkResult.getValue().split("/"));
+            // [Loop-4] 입력값에 대한 유효성 검사
+            alert = ValidatorManager.updateTaskInfo.check(input);
 
-            // [Loop-5] 업무수정 로그 기록 (전달한 input은 업무명)
-            LogRecorder.record(Ingredient.LOG_UPDATE_TASK_INFO,inputs[1]);
+            // [Loop-5] 검증 성공 시 입력된 정보로 업무 수정 및 로그 기록
+            if (alert.getKey()) {
+                String[] inputs = alert.getValue().split("/");
+                pc.update(alert.getValue().split("/"));
 
-            // [Loop-End] 홈 화면으로 복귀하기 위한 return
-            return;
+                // [메모] 업무명이 입력되지 않았을 수 있으니 찾아서 넣어줘야 함
+                String taskName = inputs[1].equals("@") ? pc.get(inputs[0]).getName() : inputs[1];
+                LogRecorder.record(Ingredient.LOG_UPDATE_TASK_INFO,taskName);
+
+                // [메모] 시스템 메세지 갱신을 위해선 alert의 key가 false가 돼줘야 함...
+                alert = new Pair<>(false,String.format(Ingredient.UPDATE_TASK_INFO_SUCCESS.getFormat(),taskName));
+            }
         }
     }
 
@@ -152,19 +167,19 @@ public class ProjectFuncs {
             }
 
             // [Loop-3] 입력값에 대한 유효성 검사
-            Pair<Boolean, String> checkResult = ValidatorManager.browseTasks.check(input);
-            // [Loop-4] 검사 결과를 alert에 할당
-            alert = checkResult;
-            // [Loop-End] 검사 통과했다면 반복문 탈출
-            if (checkResult.getKey()) break;
+            alert = ValidatorManager.browseTasks.check(input);
 
+            // [Loop-4] 검사 통과했다면 조건에 해당하는 업무 목록 화면으로 이동
+            if (alert.getKey()) {
+                if(showFilteredTasks(alert.getValue().split("/"))) {
+                    return; // [메모] 486 입력됐다면 true를 반환해 홈화면으로 복귀함
+                }
+            }
         }
-        // [2] 조건에 해당하는 업무 목록 화면으로 이동
-        showFilteredTasks(alert.getValue().split("/"));
     }
 
     /* "업무조회" 파생 화면 -> 업무 목록 출력 */
-    public static void showFilteredTasks(String[] inputs) {
+    public static boolean showFilteredTasks(String[] inputs) {
         // [1] Project에서 조건에 해당하는 Task들의 정보 추출
         Stream<Task> browsing = Project.getInstance().controller.browse(inputs);
         List<String> filteredTasks = browsing.map(Task::toString).toList();
@@ -180,18 +195,13 @@ public class ProjectFuncs {
         String uiMsg = uiBuilder.build(UIMessage.BROWSE_TASKS_RESPOND.getMsg(), MessageBuilder.pack(messageIngredients));
         String sysMsg = sysBuilder.build(SystemMessage.BROWSE_TASKS_RESPOND.getMsg());
 
-        // [4] 업무목록 화면 유지 위한 반복문 시작
-        while (true) {
-            // [Loop-1] 갈무리한 업무 목록 출력
-            Viewer.clear();
-            Viewer.print(MessageBuilder.integrate(uiMsg, sysMsg));
-            // [Loop-2] 사용자의 입력
-            String input = InputReader.read();
-            // [Loop-2-A] 특정 번호 입력 시 홈 화면으로 복귀
-            if (input.equals("486")) {
-                return;
-            }
-        }
+        // [4] 갈무리한 업무 목록 출력
+        Viewer.clear();
+        Viewer.print(MessageBuilder.integrate(uiMsg, sysMsg));
+
+        // [5] 특정 번호 입력 시 홈 화면으로 복귀, 아니라면 다시 조회화면으로
+        String input = InputReader.read();
+        return input.equals("486");
     }
 }
 
