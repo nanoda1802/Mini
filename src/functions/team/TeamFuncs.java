@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TeamFuncs {
-    /* [ "팀원초대" 선택 시 실행될 메서드 ] */
+    /* [ "팀원초대" 선택 시 실행될 실행될 실행될 메서드 ] */
     public static void inviteMember() {
         Pair<Boolean, String> alert = new Pair<>(true, "");  // [메모] System 메세지 갱신에 활용할 지역변수
         // [1] 업무등록 화면 유지할 반복문 시작
