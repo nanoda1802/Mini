@@ -91,8 +91,19 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
     }
 
     @Override
-    public void remove(String eid) {
-        members.remove(eid);
+    public void remove(String mid) {
+
+        if(members.containsKey(mid)) {
+            if(members.get(mid).getTasks() != null) {
+                // 담당자로 배정된 task에서 해임한다.
+                Set<Task> tasks = members.get(mid).getTasks();
+                for(Task task : tasks) {
+                    task.setAssignee(null);
+                }
+            }
+            members.remove(mid);
+        }
+
     }
 
     private String createMID() {
@@ -103,7 +114,7 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         return this.members.values();
     }
 
-    // task의 담당자를 바꾸는 메소드, (task, 이전 담당자, 바꿀 담당자)
+    // task의 담당자를 바꾸는 메소드 (task, 이전 담당자, 바꿀 담당자)
     private void changeAssignee(Task task,Member oldAssignee,Member member){
         oldAssignee.removeTask(task);
         task.setAssignee(member);
@@ -128,16 +139,22 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         List<String> filters = Arrays.asList(inputs);
 
         return filtering.filter(m ->{
-            // 해당 조건을 골랐을 때 해당 조건과 맞지 않으면 바로 false 반환
-            // 전부 조건 마다 and로 기능
-            if(filters.contains("1") && m.getAuth() != Authority.ADMIN) return false;
-            if(filters.contains("2") && m.getAuth() != Authority.MEMBER) return false;
-            if(filters.contains("3") && m.getAuth() != Authority.VIEWER) return false;
+            // 해당 항목을 고른지 안 고른지 우선 판단
+            // 그 조건문 안에서 검사
+            boolean found = true;
+            if (filters.contains("1")||filters.contains("2")||filters.contains("3")) {
+                found = (filters.contains("1") && m.getAuth() == Authority.ADMIN)||
+                        (filters.contains("2") && m.getAuth() == Authority.MEMBER)||
+                        (filters.contains("3") && m.getAuth() == Authority.VIEWER);
+            }
 
             boolean hasTasks = !m.getTasks().isEmpty();
-            if(filters.contains("4") &&  !hasTasks) return false;
-            if(filters.contains("5") &&  hasTasks) return false;
-            return true;
+            boolean found2 = true;
+            if (filters.contains("4")||filters.contains("5")) {
+                found2 = (filters.contains("4") && hasTasks)||
+                        (filters.contains("5") &&  !hasTasks );
+            }
+            return found && found2;
         });
 
 
