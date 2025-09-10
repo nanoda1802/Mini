@@ -151,13 +151,15 @@ public class TeamFuncs {
             if (input.equals("486")) return;
             alert = ValidatorManager.browseMembers.check(input);
             if (alert.getKey()) {
-                showFilteredMembers(alert.getValue().split(","));
+                if(showFilteredMembers(alert.getValue().split(","))){
+                    return;
+                }
             }
 
         }
     }
     /* "업무조회" 파생 화면 -> 업무 목록 출력 */
-    private static void showFilteredMembers(String[] inputs) {
+    private static boolean showFilteredMembers(String[] inputs) {
         // [1] 조건들로 값 추출 List<String>
         Stream<Member> browsing = Team.getInstance().controller.browse(inputs);
         List<String> filteredMembers = browsing.map(m ->{
@@ -183,7 +185,7 @@ public class TeamFuncs {
 
         // [5] 특정 문자가 입력되면 이전 화면으로 복귀
         String input = InputReader.read();
-        if(input.equals("486")) return;
+        return input.equals("486") ;
     }
 
 
