@@ -19,4 +19,6 @@ public class RemoveMembersValidator extends Validator {
         // [2] 통과되면 true, target 쌍 반환
         return new Pair<>(true, target);
     }
+
 }
+
