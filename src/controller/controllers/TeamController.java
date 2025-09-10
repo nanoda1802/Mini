@@ -28,10 +28,11 @@ import java.util.stream.Stream;
 
 public class TeamController extends Controller implements Adder, Getter<Member>, Updater, Remover {
     private Map<String, Member> members;
-    private long index = 1;
+    private long index;
 
     public TeamController(Map<String, Member> members) {
         this.members = members;
+        index = MemberRepository.getInstance().count()+1;
     }
 
     @Override
@@ -120,6 +121,7 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
     public void remove(String eid) {
         try {
             MemberRepository.getInstance().deleteById(eid);
+            index--;
         } catch (SQLException e) {
             LogRecorder.record(Ingredient.LOG_ERROR_SQL,"팀원 삭제");
         }

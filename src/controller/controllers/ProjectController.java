@@ -31,10 +31,11 @@ import java.util.stream.Stream;
 
 public class ProjectController extends Controller implements Adder<Task>, Getter<Task>, Updater, Remover {
     private Map<String, Task> tasks;
-    private long index = 1;
+    private long index;
 
     public ProjectController(Map<String, Task> tasks) {
         this.tasks = tasks;
+        index = ProjectRepository.getInstance().count()+1;
     }
 
     /* Create 담당 */
@@ -144,6 +145,7 @@ public class ProjectController extends Controller implements Adder<Task>, Getter
     public void remove(String tid) {
         try {
             ProjectRepository.getInstance().deleteById(tid);
+            index--;
         } catch (SQLException e) {
             LogRecorder.record(Ingredient.LOG_ERROR_SQL,"remove-findById()");
         }

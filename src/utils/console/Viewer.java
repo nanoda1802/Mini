@@ -9,7 +9,7 @@ public class Viewer {
     public static void clear() {
         try {
             // 파워쉘에서도 작동하는 방법
-            if (System.getProperty("").toLowerCase().contains("windows")) {
+            if (System.getProperty("os.name").toLowerCase().contains("windows")) {
                 // 윈도우에서는 ProcessBuilder 사용
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
