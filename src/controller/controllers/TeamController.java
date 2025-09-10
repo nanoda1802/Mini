@@ -4,7 +4,6 @@ import configs.message.Ingredient;
 import configs.team.Authority;
 import controller.*;
 import managers.ConverterManager;
-import model.project.Project;
 import model.project.Task;
 import model.team.Member;
 import repository.MemberRepository;
@@ -95,7 +94,7 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
                     // insert 문 쓰는데 복합키를 기본키로 쓰기 때문에 존재 검사 먼저 해야함
                     // exist함수들만 다 예외처리 해둠.(존재 검사 오류 -> 로그로 던짐)
                     if (!ProjectTeamRepository.getInstance().exists(mid, tid)) {
-                        try{ProjectTeamRepository.getInstance().addMemberToProject(tid,mid);}
+                        try{ProjectTeamRepository.getInstance().add(tid,mid);}
                         catch(SQLException e){LogRecorder.record(Ingredient.LOG_ERROR_SQL,"프로젝트에 멤버 추가");}
                     }
 

@@ -2,13 +2,10 @@ package model.team;
 
 import configs.message.Ingredient;
 import configs.team.Authority;
-import controller.controllers.TeamController;
 import model.project.Task;
-import repository.MemberRepository;
 import repository.ProjectTeamRepository;
 import utils.LogRecorder;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,7 +61,7 @@ public class Member {
 
     public void addTask(Task task){
         try{
-            ProjectTeamRepository.getInstance().addMemberToProject(task.getTid(),mid);
+            ProjectTeamRepository.getInstance().add(task.getTid(),mid);
         }catch(Exception e){
             LogRecorder.record(Ingredient.LOG_ERROR_SQL,"addTask 처리");
             e.printStackTrace();

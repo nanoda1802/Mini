@@ -120,8 +120,8 @@ public class ProjectController extends Controller implements Adder<Task>, Getter
             }
             if(member != null){
                 if(!ProjectTeamRepository.getInstance().exists(tid,member.getMid())){
-                    try{ProjectTeamRepository.getInstance().addMemberToProject(tid,mid);}catch (SQLException e){
-                        LogRecorder.record(Ingredient.LOG_ERROR_SQL,"changeProjectTeam-addMemberToProject()");
+                    try{ProjectTeamRepository.getInstance().add(tid,mid);}catch (SQLException e){
+                        LogRecorder.record(Ingredient.LOG_ERROR_SQL,"changeProjectTeam-add()");
                     }
                 }
             }
