@@ -12,6 +12,9 @@ import managers.messageBuild.UIMessageBuilder;
 import managers.messageBuild.ingredient.OverviewMessageBuilder;
 import model.project.Project;
 import model.team.Team;
+import repository.MakeConnection;
+import repository.MemberRepository;
+import repository.ProjectRepository;
 import utils.FuncTest;
 import utils.LogRecorder;
 import utils.Graph;
@@ -19,6 +22,7 @@ import utils.Pair;
 import utils.console.InputReader;
 import utils.console.Viewer;
 
+import java.sql.Connection;
 import java.util.List;
 
 // [ HomeFuncs 개요 ]
@@ -30,9 +34,8 @@ public class HomeFunc {
     /* [ 프로그램 실행 내내 호출이 유지될 메서드 ] */
     public static void start() {
         // [Test] 기능 테스트용 더미 데이터 추가
-        FuncTest.addDummyTasks();
-        FuncTest.addDummyMembers();
-
+//        FuncTest.addDummyTasks();
+//        FuncTest.addDummyMembers();
 
         // [1] 프로그램 실행 동안 유지될 반복문 시작
         while (true) {

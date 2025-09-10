@@ -1,6 +1,12 @@
 package main;
 
 import functions.HomeFunc;
+import repository.MakeConnection;
+import repository.MemberRepository;
+import repository.ProjectRepository;
+
+
+
 
 // [ Application 개요 ]
 // - 프로그램 실행부, 딸깍
@@ -17,6 +23,7 @@ import functions.HomeFunc;
 //   HomeFunc는 0번과 4번 선택지 제외하곤 정상 작동하지 않슴다...
 
 public class Application {
+
     public static void main(String[] args) {
         HomeFunc.start();
     }
