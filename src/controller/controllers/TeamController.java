@@ -74,7 +74,7 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         // 자료형 = String / String / Authority / String
         // [1] 항목별로 Team의 각 필드타입에 맞게 convert
         String mid = changes[0];
-        if(MemberRepository.getInstance().existsById(mid)) {return;}
+        if(!MemberRepository.getInstance().existsById(mid)) {return;}
         Member member = get(mid);
         String name = changes[1];
         Authority auth = changes[2].equals("@") ?
@@ -83,6 +83,7 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
         // [2] tid로 해당 팀원에게 업무 할당
         if(!changes[3].equals("@")){
             String[] tids = changes[3].split(",");
+            Set<String> tidSet = new HashSet<>();
             for (String tid : tids) {
                 Task task = null;
                 try{
@@ -91,13 +92,14 @@ public class TeamController extends Controller implements Adder, Getter<Member>,
                     LogRecorder.record(Ingredient.LOG_ERROR_SQL,"update-findById()");
                 }
                 if(task != null) {
-                    // insert 문 쓰는데 복합키를 기본키로 쓰기 때문에 존재 검사 먼저 해야함
-                    // exist함수들만 다 예외처리 해둠.(존재 검사 오류 -> 로그로 던짐)
-                    if (!ProjectTeamRepository.getInstance().exists(mid, tid)) {
-                        try{ProjectTeamRepository.getInstance().add(tid,mid);}
-                        catch(SQLException e){LogRecorder.record(Ingredient.LOG_ERROR_SQL,"프로젝트에 멤버 추가");}
-                    }
-
+                    tidSet.add(task.getTid());
+                }
+            }
+            if(!tidSet.isEmpty()){
+                try {
+                    ProjectTeamRepository.getInstance().updateProjectTeamByProjectIds(mid,tidSet);
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }

@@ -48,16 +48,12 @@ public class ProjectController extends Controller implements Adder<Task>, Getter
         String tid = createId();
         String name = infos[0];
         TaskType type = ConverterManager.stringTaskType.convertTo(infos[1]);
-        // [1-2] 해당 프로젝트에 담당 팀원 배정
-        if(!infos[2].equals("@")) {
-            String[] mids =  infos[2].split(",");
-            changeProjectTeam(tid, mids);
-        }
+
         // 방금 등록한 프로젝트라서 NOT_STARTED로 초기화
         TaskStatus status = TaskStatus.values()[0];
         LocalDate dueTo = infos[3].equals("@")
                 ? null
-                : ConverterManager.stringDate.convertTo(infos[3]);
+                : ConverterManager.stringDate.convertToInput(infos[3]);
 
         // [2] 신규 Task 인스턴스 생성
         Task task = new Task(tid, name, type, status, dueTo);
@@ -68,6 +64,11 @@ public class ProjectController extends Controller implements Adder<Task>, Getter
         } catch (SQLException e) {
             LogRecorder.record(Ingredient.LOG_ERROR_SQL,"add-save()");
             e.printStackTrace();
+        }
+        // [1-2] 해당 프로젝트에 담당 팀원 배정
+        if(!infos[2].equals("@")) {
+            String[] mids =  infos[2].split(",");
+            changeProjectTeam(tid, mids);
         }
         return task;
     }
@@ -110,6 +111,7 @@ public class ProjectController extends Controller implements Adder<Task>, Getter
     }
 
     private void changeProjectTeam(String tid, String[] mids) {
+        Set<String> midSet = new HashSet<>();
         for (String mid : mids){
             Member member = null;
             try{
@@ -119,11 +121,14 @@ public class ProjectController extends Controller implements Adder<Task>, Getter
                 e.printStackTrace();
             }
             if(member != null){
-                if(!ProjectTeamRepository.getInstance().exists(tid,member.getMid())){
-                    try{ProjectTeamRepository.getInstance().add(tid,mid);}catch (SQLException e){
-                        LogRecorder.record(Ingredient.LOG_ERROR_SQL,"changeProjectTeam-add()");
-                    }
-                }
+                midSet.add(member.getMid());
+            }
+        }
+        if(!midSet.isEmpty()){
+            try {
+                ProjectTeamRepository.getInstance().updateProjectTeamByMemberIds(tid,midSet);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
